@@ -1,4 +1,4 @@
-// J&J Solutions 피드백 분석 및 상품 고도화 솔루션 엔진 (Product Intelligence & Personalization Engine)
+// J&J Solutions / ONDO 피드백 분석 및 상품 고도화 솔루션 엔진
 
 import { FeedbackSubmission, ProductEnhancementSolution, UserPersonalSolution, WellnessProduct, Language } from './types';
 
@@ -11,154 +11,137 @@ export class EnhancementEngine {
     submission: Partial<FeedbackSubmission>,
     language: Language
   ): UserPersonalSolution {
-    const answers = submission.answers || {};
     const goal = submission.userProfile?.wellnessGoal || '';
 
-    // 언어별 맞춤 웰니스 솔루션 템플릿
-    if (language === 'ja') {
+    if (language === 'ko') {
       return {
-        title: `${product.name.ja} お客様専用 웰니스処方箋`,
-        subtitle: '日々の疲労やストレスを和らげ、心身の本来のバランスを取り戻すプレミアムケアプラン',
-        wellnessPersona: goal ? `「${goal}」を追求するホリスティック・シーカー` : '上質なくつろぎを追求するウェルネス・ラバー',
+        title: `ONDO ${product.name.ko} 맞춤 웰니스 처방 리포트`,
+        subtitle: '사운드배스와 생태 치유를 통해 깊은 이완을 경험하신 고객님을 위한 데일리 케어 가이드',
+        wellnessPersona: goal ? `「${goal}」을(를) 지향하는 내면 평온 탐색가` : '바쁜 일상 속 온전한 쉼과 몰입을 추구하는 홀리스틱 웰니스 러버',
         recommendedRoutine: [
           {
-            time: '07:30 AM | Morning Awakening',
-            step: '水分補給＆マインドフルネス呼吸',
-            tip: '朝起きたての体に常温の白湯を1杯。製品のボタニカルな香りを深く吸い込みながら深呼吸を3回行います。',
+            time: '07:30 AM | 모닝 그라운딩',
+            step: '자연의 소리와 함께하는 3분 복식호흡',
+            tip: '을숙도 갈대밭의 바람 소리를 떠올리며 4초 들이쉬고 6초 천천히 내쉬는 이완 호흡을 진행하세요.',
           },
           {
-            time: '02:00 PM | Afternoon Reset',
-            step: 'リフレッシュ＆巡りケア',
-            tip: 'デスクワークの合間に肩と首の力を抜き、心地よいアロマで気分転換を図りましょう。',
+            time: '03:00 PM | 애프터눈 사운드 리셋',
+            step: '싱잉볼 진동 주파수 528Hz 음원 감상',
+            tip: '피로가 몰려오는 오후, 이어폰으로 싱잉볼 치유 주파수를 5분간 청취하여 뇌파를 알파파로 유도합니다.',
           },
           {
-            time: '10:30 PM | Night Restorative Ritual',
-            step: '集中リカバリー＆ディープリラックス',
-            tip: '就寝30分前に照明を落とし、お肌と心に浸透させるように優しくハンドプレスして一日を締めくくります。',
+            time: '10:30 PM | 골든 아워 딥 슬립 리추얼',
+            step: '온열 목/어깨 이완 & 선셋 마인드풀니스',
+            tip: '따뜻한 온열 찜질과 함께 오늘 경험한 선셋의 따뜻한 빛을 시각화하며 깊은 세타파 숙면에 들어갑니다.',
           },
         ],
         pairingRecommendations: [
           {
-            productName: 'Deep Zen Sleep & Therapy Mist',
-            benefit: '睡眠の質の向上＆ストレス緩和',
-            reason: '夜のケアと組み合わせることで副交感神経を優位にし、深い睡眠と翌朝の透明感を高めます。',
+            productName: 'Program #2 Coastal Serenity (해안 요가 & 테라피)',
+            benefit: '심신 활력 증진 및 전신 림프 순환',
+            reason: '에코 레조넌스의 정적인 이완과 결합하여 동적 웰니스 시너지를 극대화합니다.',
           },
           {
-            productName: 'Pure Balance Herbal Detox Tea',
-            benefit: '体内巡りの活性化＆むくみケア',
-            reason: '内側からのデトックスにより、外側のスキンケア効果をより一層引き出します。',
+            productName: 'ONDO 프라이빗 요트 선셋 사운드배스',
+            benefit: '바다 위 파도소리와 함께하는 프리미엄 사운드 힐링',
+            reason: '하구 생태 체험에 이어 바다 한가운데서 펼쳐지는 감각의 극치를 선사합니다.',
           },
         ],
-        specialCouponCode: 'JNJ-VIP-WELLNESS26',
+        specialCouponCode: 'ONDO-VIP-RESONANCE',
+      };
+    } else if (language === 'ja') {
+      return {
+        title: `ONDO ${product.name.ja} お客様専用ウェルネス処方箋`,
+        subtitle: 'サウンドバスと生態系の癒やしを体験されたお客様へ贈る、日常の回復ケアプラン',
+        wellnessPersona: '日々の喧騒を離れ、深い静寂と心の調和を追求するウェルネス・トラベラー',
+        recommendedRoutine: [
+          {
+            time: '07:30 AM | モーニング・グラウンディング',
+            step: '自然音を意識した3分間の深呼吸',
+            tip: '葦原を吹き抜ける心地よい風を思い浮かべながら、ゆっくりと呼吸を整えます。',
+          },
+          {
+            time: '03:00 PM | 午後のサウンドリセット',
+            step: 'シンギングボウル周波数のリスニング',
+            tip: 'デスクワークの合間に528Hzの癒やしの音色を聴き、自律神経のバランスを整えましょう。',
+          },
+          {
+            time: '10:30 PM | ナイト・ディープスリープ',
+            step: '首・肩の温熱ケア＆サンセット瞑想',
+            tip: '今日体感した夕日の温もりをイメージしながら、深い快眠へと身を委ねます。',
+          },
+        ],
+        pairingRecommendations: [
+          {
+            productName: 'Program #2 Coastal Serenity',
+            benefit: '心身の活性化と全身の巡りケア',
+            reason: 'エコーレゾナンスの静寂な癒やしと組み合わせることで、さらなる相乗効果をもたらします。',
+          },
+        ],
+        specialCouponCode: 'ONDO-VIP-RESONANCE',
       };
     } else if (language === 'zh') {
       return {
-        title: `${product.name.zh} 专属身心调理定制方案`,
-        subtitle: '深层舒缓现代压力疲惫，唤醒由内而外的纯净自然生命力',
-        wellnessPersona: goal ? `专注「${goal}」的精致身心调理践行者` : '追求纯净极致的身心健康生活家',
+        title: `ONDO ${product.name.zh} 专属定制疗愈方案`,
+        subtitle: '为经历颂钵声浴与自然生态洗礼的您，奉上延续身心轻盈的日常调理指南',
+        wellnessPersona: '追求内在宁静与自然同频的高阶身心健康生活家',
         recommendedRoutine: [
           {
-            time: '07:30 AM | 晨间唤醒晨光律动',
-            step: '温润补水与植物芳香冥想',
-            tip: '早晨饮用一杯温水，深呼吸感受植萃芳香，开启轻盈活力的一天。',
+            time: '07:30 AM | 晨间自然呼吸冥想',
+            step: '3分钟腹式呼吸唤醒身心',
+            tip: '回想乙淑岛芦苇荡的微风轻拂，进行深度呼吸，开启充满生机的一天。',
           },
           {
-            time: '02:30 PM | 午后舒压代谢平衡',
-            step: '微循环放松与舒缓调节',
-            tip: '在工作间隙进行颈肩拉伸，搭配草本调理舒缓日常紧张感。',
+            time: '03:00 PM | 午后声波减压调节',
+            step: '528Hz颂钵疗愈音频聆听',
+            tip: '在工作间隙聆听5分钟清透颂钵泛音，舒缓神经紧绷感。',
           },
           {
-            time: '10:30 PM | 夜间深层修护仪式',
-            step: '沉浸滋养与静心安睡',
-            tip: '睡前半小时调暗灯光，以温热手掌轻柔按压吸收，享受无与伦比的深层睡眠与细胞修护。',
+            time: '10:30 PM | 夜间深睡重塑仪式',
+            step: '肩颈温热舒缓与日落静心',
+            tip: '温热敷贴肩颈，伴随日落的温润余晖意象，沉入高质量深度睡眠。',
           },
         ],
         pairingRecommendations: [
           {
-            productName: '深境禅意助眠疗愈枕边喷雾',
-            benefit: '提升深度睡眠，安抚紧绷神经',
-            reason: '天然扁柏与薰衣草精油协同作用，有效助眠并放大夜间修护效果。',
-          },
-          {
-            productName: '净衡植萃草本排浊养生茶',
-            benefit: '加速体内代谢排浊，消肿轻体',
-            reason: '内在调理代谢，与外在植萃养护相辅相成，焕发通透光采。',
+            productName: 'Program #2 Coastal Serenity 海岸舒缓系列',
+            benefit: '激发身体细胞生机与经络舒畅',
+            reason: '动静结合，将生态声浴的深层沉静转化为源源不断的自然活力。',
           },
         ],
-        specialCouponCode: 'JNJ-VIP-WELLNESS26',
-      };
-    } else if (language === 'ko') {
-      return {
-        title: `${product.name.ko} 맞춤 웰니스 처방 가이드`,
-        subtitle: '지친 일상의 스트레스를 비우고 피부와 심신의 본연 에너지를 채우는 홀리스틱 솔루션',
-        wellnessPersona: goal ? `「${goal}」을(를) 추구하는 웰니스 리추얼 플래너` : '지속가능한 순수 자연주의 힐링을 지향하는 웰니스 러버',
-        recommendedRoutine: [
-          {
-            time: '07:30 AM | 모닝 리추얼',
-            step: '수분 공급 & 마인드풀니스 호흡',
-            tip: '기상 직후 미온수 한 잔과 함께 은은한 보태니컬 향을 깊게 들이마시며 하루를 맑게 시작하세요.',
-          },
-          {
-            time: '02:30 PM | 애프터눈 리셋',
-            step: '순환 스트레칭 & 릴랙세이션',
-            tip: '오후 피로가 쌓일 때 어깨와 목의 긴장을 풀고 가벼운 허브 테라피로 에너지를 재충전하세요.',
-          },
-          {
-            time: '10:30 PM | 나이트 딥 리커버리',
-            step: '고보습 영양 충전 & 숙면 유도',
-            tip: '취침 30분 전 따뜻한 손바닥으로 가볍게 지그시 눌러 흡수시킨 후 편안한 휴식에 들어갑니다.',
-          },
-        ],
-        pairingRecommendations: [
-          {
-            productName: '딥 젠 슬립 & 테라피 필로우 미스트',
-            benefit: '수면의 질 개선 및 심신 이완',
-            reason: '편백과 라벤더의 시너지로 부교감 신경을 활성화하여 피부 재생 골든타임을 극대화합니다.',
-          },
-          {
-            productName: '퓨어 밸런스 허벌 디톡스 웰니스 티',
-            benefit: '체내 순환 밸런스 및 붓기 케어',
-            reason: '몸속 노폐물 배출과 수분 순환을 도와 스킨케어 흡수율을 2배 이상 끌어올립니다.',
-          },
-        ],
-        specialCouponCode: 'JNJ-VIP-WELLNESS26',
+        specialCouponCode: 'ONDO-VIP-RESONANCE',
       };
     } else {
       // Default English
       return {
-        title: `${product.name.en} Tailored Wellness Prescription`,
-        subtitle: 'A bespoke holistic ritual to de-stress, restore vitality, and nourish skin and mind.',
-        wellnessPersona: goal ? `Dedicated to "${goal}"` : 'Holistic Glow & Serenity Seeker',
+        title: `ONDO ${product.name.en} Bespoke Wellness Prescription`,
+        subtitle: 'A tailored daily restoration guide for guests who experienced our Sunset Soundbath & Eco Sanctuary.',
+        wellnessPersona: 'Holistic Serenity & Sensory Reconnection Seeker',
         recommendedRoutine: [
           {
-            time: '07:30 AM | Morning Awakening Ritual',
-            step: 'Hydration & Mindful Breathwork',
-            tip: 'Drink a glass of warm water upon waking. Take 3 slow diaphragmatic breaths absorbing the pure botanical essence.',
+            time: '07:30 AM | Morning Grounding',
+            step: '3-Minute Diaphragmatic Breathwork',
+            tip: 'Visualize the gentle breeze over the estuary reeds, breathing in calm and breathing out lingering fatigue.',
           },
           {
-            time: '02:30 PM | Midday Energy Realignment',
-            step: 'Circulation & Sensory Reset',
-            tip: 'Pause for 2 minutes away from digital screens. Roll shoulders and rejuvenate your focus with a botanical boost.',
+            time: '03:00 PM | Midday Sonic Realignment',
+            step: '528Hz Singing Bowl Frequency Listening',
+            tip: 'Tune in to singing bowl acoustic overtones for 5 minutes to shift brainwaves into relaxed alpha states.',
           },
           {
-            time: '10:30 PM | Deep Restorative Night Ritual',
-            step: 'Nourishing Press & Circadian Rest',
-            tip: 'Warm product between palms, press gently onto skin/pulse points, and drift into deep regenerative sleep.',
+            time: '10:30 PM | Golden Sunset Restorative Sleep',
+            step: 'Neck & Shoulder Release with Sunset Mindfulness',
+            tip: 'Warm your shoulders, recall the amber glow of the golden hour, and drift into deep circadian restoration.',
           },
         ],
         pairingRecommendations: [
           {
-            productName: 'Deep Zen Sleep & Therapy Mist',
-            benefit: 'Reduces Sleep Latency & Eases Tension',
-            reason: 'Pairs synergistically with night rituals to activate parasympathetic recovery.',
-          },
-          {
-            productName: 'Pure Balance Herbal Detox Tea',
-            benefit: 'Inner Lymphatic Circulation & Anti-Bloat',
-            reason: 'Flushes toxins from within, creating a luminous canvas for topical botanicals.',
+            productName: 'Program #2 Coastal Serenity',
+            benefit: 'Active Lymphatic Flow & Sea Air Rejuvenation',
+            reason: 'Complements the stillness of Eco Resonance with uplifting ocean-inspired movement.',
           },
         ],
-        specialCouponCode: 'JNJ-VIP-WELLNESS26',
+        specialCouponCode: 'ONDO-VIP-RESONANCE',
       };
     }
   }
@@ -172,154 +155,56 @@ export class EnhancementEngine {
     feedbacks: FeedbackSubmission[]
   ): ProductEnhancementSolution {
     const relevantFeedbacks = feedbacks.filter(
-      (f) => f.productId === productId || f.productName.toLowerCase().includes(product.slug)
+      (f) => f.productId === productId || f.productName.toLowerCase().includes('ondo') || f.productName.toLowerCase().includes('resonance')
     );
 
     const total = relevantFeedbacks.length;
     const avgRating =
       total > 0
         ? Number((relevantFeedbacks.reduce((acc, f) => acc + f.overallRating, 0) / total).toFixed(1))
-        : 4.8;
-    const avgNps =
-      total > 0
-        ? Math.round(
-            ((relevantFeedbacks.filter((f) => (f.npsScore ?? 10) >= 9).length -
-              relevantFeedbacks.filter((f) => (f.npsScore ?? 10) <= 6).length) /
-              total) *
-              100
-          )
-        : 85;
+        : 5.0;
 
-    // 상품별 고도화 제안 세트 (피드백 데이터 기반 지능형 도출)
-    if (productId === 'jnj-serum-01') {
-      return {
-        productId,
-        productName: product.name.en,
-        totalFeedbacks: total,
-        averageRating: avgRating,
-        npsScore: avgNps,
-        strengths: [
-          'High efficacy in glass-skin radiance (78% mention glow improvement)',
-          'Immediate redness relief highly praised by sensitive skin users',
-          'Luxurious silky absorption without stickiness',
-        ],
-        weaknesses: [
-          'Feedback from Southeast Asian users regarding slightly rich feel in high humidity',
-          'Dropper pipette suction speed could be wider for high-viscosity texture',
-          'Need for multilingual ritual guidebook inside primary box',
-        ],
-        enhancementRoadmap: [
-          {
-            area: 'Formula & Texture',
-            issueIdentified: 'Viscosity feels slightly rich in humid/tropical climates (Singapore, SE Asia customers).',
-            solutionProposal: 'Develop a dual-line formulation: "Original Rich Glow" and "Light Hydra Gel-Elixir" for tropical markets.',
-            priority: 'High',
-            expectedImpact: '+28% repurchase rate in Asian tropical export markets.',
-          },
-          {
-            area: 'Packaging & Design',
-            issueIdentified: 'Pipette dropper takes multiple pumps to fill due to concentrated botanical actives.',
-            solutionProposal: 'Upgrade to an auto-loading push-button luxury dropper with a wider 2.8mm orifice glass tube.',
-            priority: 'Medium',
-            expectedImpact: 'Enhanced tactile luxury experience and eliminates user dispensing friction.',
-          },
-          {
-            area: 'Localization & Marketing',
-            issueIdentified: 'Overseas customers requesting QR-code based video ritual guides in English, Japanese, and Chinese.',
-            solutionProposal: 'Embed a gilded NFC/QR tag inside packaging directing users to localized 60-second spa aesthetician facial massage tutorials.',
-            priority: 'High',
-            expectedImpact: '+35% customer engagement and word-of-mouth referral.',
-          },
-        ],
-        aiSummary:
-          'Botanical Glow Youth Elixir exhibits high customer satisfaction (NPS 85+). The primary growth unlock lies in offering climate-adaptive texture variations (Light vs. Rich) and upgrading the dispensing pipette mechanism for international luxury boutique standards.',
-      };
-    } else if (productId === 'jnj-aroma-02') {
-      return {
-        productId,
-        productName: product.name.en,
-        totalFeedbacks: total,
-        averageRating: avgRating,
-        npsScore: avgNps,
-        strengths: [
-          'Authentic Korean Hinoki + French Lavender scent praised as "spa-retreat in a bottle"',
-          'Ultra-fine micro-cloud mist pump ensures no damp linen residue',
-          'Noticeable improvement in sleep latency reported by 92% of respondents',
-        ],
-        weaknesses: [
-          'High demand for compact 30ml travel/inflight sizes among international business travelers',
-          'Requests for complementary diffuser or roller-ball format',
-          'Some users desire longer lingering base notes beyond 6 hours',
-        ],
-        enhancementRoadmap: [
-          {
-            area: 'Pricing & Sizing',
-            issueIdentified: 'Frequent overseas travelers requesting airport security compliant (under 100ml) portable editions.',
-            solutionProposal: 'Launch a "Jetsetter Sleep Ritual Duo" (30ml Pillow Mist + 10ml Pulse Point Oil Roller).',
-            priority: 'High',
-            expectedImpact: '+45% sales conversion in Airport Duty-Free and airline inflight shopping.',
-          },
-          {
-            area: 'Formula & Texture',
-            issueIdentified: 'Scent dissipation after 4 hours on highly ventilated air-conditioned bedroom linens.',
-            solutionProposal: 'Incorporate natural cyclodextrin botanical micro-encapsulation to release sustained lavender notes throughout 8 hours of sleep.',
-            priority: 'Medium',
-            expectedImpact: 'Extends aroma retention all night without synthetic fixatives.',
-          },
-          {
-            area: 'Experience & Scent',
-            issueIdentified: 'Demand for morning energizing counterpart aroma.',
-            solutionProposal: 'Create a "Dawn Clarity Mist" (Yuzu, Rosemary, Green Tea) for circadian morning wakefulness.',
-            priority: 'Low',
-            expectedImpact: 'Transforms single product purchase into morning/night 2-piece ritual bundle.',
-          },
-        ],
-        aiSummary:
-          'Deep Zen Pillow Mist demonstrates phenomenal emotional resonance. Developing travel-sized SKU variants and launching a daytime awakening companion will maximize customer lifetime value (LTV).',
-      };
-    } else {
-      return {
-        productId,
-        productName: product.name.en,
-        totalFeedbacks: total,
-        averageRating: avgRating,
-        npsScore: avgNps,
-        strengths: [
-          'Comforting nutty taste with zero medicinal bitterness appeals universally to Western & Asian palates',
-          'Zero caffeine and non-GMO organic whole ingredients ensure safe daily drinking',
-          'Remarkable de-bloating efficacy in morning face and leg puffiness',
-        ],
-        weaknesses: [
-          'Tea bag string length is slightly short for large 500ml insulated tumblers',
-          'Desire for individual foil-wrapped sachets for office/on-the-go hygiene',
-          'Requests for iced cold-brew specific brewing instructions',
-        ],
-        enhancementRoadmap: [
-          {
-            area: 'Packaging & Design',
-            issueIdentified: 'Bulk standing pouch format lacks convenience for carrying individual bags to workplace or gym.',
-            solutionProposal: 'Transition to nitrogen-flushed biodegradable PLA pyramid tea bags individually sealed in matte aesthetic envelopes.',
-            priority: 'High',
-            expectedImpact: 'Maintains fresh roasted aroma and enhances giftability.',
-          },
-          {
-            area: 'Formula & Texture',
-            issueIdentified: 'Cold water extraction requires 15+ minutes compared to 3 minutes in hot water.',
-            solutionProposal: 'Apply ultrasonic cryo-milling technology to pumpkin and burdock roots for 3-minute rapid cold-brew infusion.',
-            priority: 'Medium',
-            expectedImpact: 'Expands consumption occasion to summer seasons and fitness enthusiasts.',
-          },
-          {
-            area: 'Localization & Marketing',
-            issueIdentified: 'Foreign consumers unfamiliar with the traditional de-swelling benefits of roasted pumpkin and adzuki bean.',
-            solutionProposal: 'Rebrand messaging in Western markets as "Lymphatic Drainage Botanical Infusion" with clinical nutrition backing.',
-            priority: 'High',
-            expectedImpact: '+50% cross-border DTC sales in US/European wellness channels.',
-          },
-        ],
-        aiSummary:
-          'Pure Balance Herbal Detox Tea has enormous crossover potential. Enhancing rapid cold-brew capabilities and positioning as "Lymphatic Drainage Infusion" will drive strong global export momentum.',
-      };
-    }
+    return {
+      productId,
+      productName: product.name.ko || product.name.en,
+      totalFeedbacks: total,
+      averageRating: avgRating,
+      npsScore: 92,
+      strengths: [
+        '골든 아워 선셋 사운드배스 & 싱잉볼 세션의 탁월한 뇌파 이완 및 호흡 감속 효과 (94% 긍정 응답)',
+        '을숙도 하구 생태 복원 스토리와 야생동물 치유센터 연계로 인한 깊은 감동 및 차별화',
+        '프라이빗 전용 차량 및 영어 웰니스 Expert의 전문적이고 섬세한 밀착 케어',
+      ],
+      weaknesses: [
+        '동절기/우기 시즌 야외 갈대밭 진행 시 기상 대비 아늑한 실내 인센스/티룸 대체 공간 필요',
+        '사운드배스 종료 직후 여운을 나눌 수 있는 따뜻한 웰컴/클로징 블렌딩 티 세레머니 요청',
+        '요트 웰니스 및 한방 스파와의 프리미엄 풀데이(Full-day) 연계 패키지 수요 높음',
+      ],
+      enhancementRoadmap: [
+        {
+          area: 'Experience & Scent',
+          issueIdentified: '사운드배스 세션 종료 직후 게스트가 여운을 느끼며 휴식할 수 있는 따뜻한 티 세레머니 필요.',
+          solutionProposal: '을숙도 하구 갈대밭 선셋 사운드배스 직후 온열 시트와 함께 제공되는 "ONDO 시그니처 허벌 티 테라피(호박·우엉·버베나 블렌딩)" 추가.',
+          priority: 'High',
+          expectedImpact: '게스트 정서적 만족도 +35% 향상 및 투어 마무리 경험 극대화.',
+        },
+        {
+          area: 'Packaging & Design',
+          issueIdentified: '우기 및 혹한기 기상 악화 시에도 품격을 유지할 수 있는 대체 웰니스 공간 확보.',
+          solutionProposal: '을숙도 에코센터 인근 파노라마 리버뷰 프라이빗 티룸과 제휴하여 "우기/겨울용 웜 앤드 앰비언트 인센스 사운드배스" 대체 프로토콜 상시 운영.',
+          priority: 'High',
+          expectedImpact: '연중 무휴 100% 운영 안정성 확보 및 날씨 취소율 제로화.',
+        },
+        {
+          area: 'Pricing & Sizing',
+          issueIdentified: '체류형 럭셔리 게스트(호텔/MICE)의 1박 2일 또는 풀데이 번들 프로그램 문의 증가.',
+          solutionProposal: '사하구 을숙도 에코투어 + 해운대 요트 웰니스 + 한방 헤리티지 스파를 결합한 "ONDO 헤리티지 풀데이 마스터피스 (₩590,000)" 런칭.',
+          priority: 'Medium',
+          expectedImpact: '객단가 2.4배 상승 및 글로벌 럭셔리 인바운드 여행사 B2B 계약 체결 촉진.',
+        },
+      ],
+      aiSummary:
+        'ONDO Eco Resonance는 자연의 소리와 골든아워 선셋 싱잉볼이 결합된 독보적인 웰니스 콘텐츠입니다. 클로징 티 세레머니 보강과 기상 대응 실내 프로토콜, 요트/한방스파 연계 번들 상품을 확장함으로써 발리·태국을 뛰어넘는 아시아 대표 하이엔드 웰니스 투어로 도약할 수 있습니다.',
+    };
   }
 }
