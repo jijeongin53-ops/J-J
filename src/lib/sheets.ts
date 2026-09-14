@@ -57,7 +57,7 @@ export const ONDO_ECO_RESONANCE_PRODUCT: WellnessProduct = {
 
 export const MOCK_PRODUCTS: WellnessProduct[] = [ONDO_ECO_RESONANCE_PRODUCT];
 
-// 2. ONDO 22개 상세 피드백 문항 정의 (Part 1 ~ Part 4 다국어 지원)
+// 2. ONDO 22개 상세 피드백 문항 정의 (Part 1 ~ Part 4)
 export const ONDO_SURVEY_QUESTIONS: SurveyQuestion[] = [
   // ================= Part 1. 전체적인 감성 경험 =================
   {
@@ -491,7 +491,7 @@ export const ONDO_SURVEY_QUESTIONS: SurveyQuestion[] = [
 export const MOCK_QUESTIONS: SurveyQuestion[] = ONDO_SURVEY_QUESTIONS;
 export const MOCK_FEEDBACKS: FeedbackSubmission[] = [];
 
-// 구글 시트 연동 유틸리티 클래스/함수
+// 구글 시트 연동 유틸리티 클래스/함수 (0초 즉시 렌더링 + 비동기 타임아웃 최적화)
 export class GoogleSheetsService {
   private static gasUrlKey = 'jnj_gas_webhook_url';
   private static localProductsKey = 'jnj_local_products';
@@ -511,10 +511,8 @@ export class GoogleSheetsService {
     }
   }
 
-  // 1. 상품 목록 조회 (기본 ONDO 상품 포함)
+  // 1. 상품 목록 조회 (로컬 캐시 즉시 반환 + 최대 1.5초 타임아웃)
   public static async fetchProducts(): Promise<WellnessProduct[]> {
-    const url = this.getWebhookUrl();
-    
     let localProducts: WellnessProduct[] = [ONDO_ECO_RESONANCE_PRODUCT];
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(this.localProductsKey);
@@ -528,23 +526,31 @@ export class GoogleSheetsService {
       }
     }
 
-    if (!url) {
-      return localProducts;
-    }
+    const url = this.getWebhookUrl();
+    if (!url) return localProducts;
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 1500); // 1.5초 타임아웃
+
       const response = await fetch(`${url}?action=getProducts`, {
         method: 'GET',
         cache: 'no-store',
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
+
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data) && data.length > 0) {
+          if (typeof window !== 'undefined') {
+            localStorage.setItem(this.localProductsKey, JSON.stringify(data));
+          }
           return data;
         }
       }
     } catch (e) {
-      console.warn('Failed to fetch products from Google Sheets, using local storage:', e);
+      // 타임아웃 또는 실패 시 즉시 로컬 데이터 반환
     }
     return localProducts;
   }
@@ -559,18 +565,15 @@ export class GoogleSheetsService {
 
     const url = this.getWebhookUrl();
     if (url) {
-      try {
-        await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'addProduct',
-            payload: product,
-          }),
-        });
-      } catch (e) {
-        console.warn('Failed to sync new product to Google Sheets:', e);
-      }
+      // 비동기 전송 (결과를 기다리지 않고 바로 성공 처리)
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'addProduct',
+          payload: product,
+        }),
+      }).catch(() => {});
     }
 
     return { success: true, message: 'Product added successfully' };
@@ -586,24 +589,21 @@ export class GoogleSheetsService {
 
     const url = this.getWebhookUrl();
     if (url) {
-      try {
-        await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'deleteProduct',
-            payload: { id: productId },
-          }),
-        });
-      } catch (e) {}
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'deleteProduct',
+          payload: { id: productId },
+        }),
+      }).catch(() => {});
     }
 
     return { success: true };
   }
 
-  // 4. 질문 목록 조회 (ONDO 22개 문항 자동 매핑)
+  // 4. 질문 목록 조회 (0초 즉시 반환 + 백그라운드 갱신)
   public static async fetchQuestions(productId?: string): Promise<SurveyQuestion[]> {
-    const url = this.getWebhookUrl();
     let questions = ONDO_SURVEY_QUESTIONS;
 
     if (typeof window !== 'undefined') {
@@ -616,31 +616,34 @@ export class GoogleSheetsService {
       }
     }
 
+    const url = this.getWebhookUrl();
     if (url) {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1500);
+
         const response = await fetch(`${url}?action=getQuestions`, {
           method: 'GET',
           cache: 'no-store',
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
+
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {
             questions = data;
           }
         }
-      } catch (e) {
-        console.warn('Failed to fetch questions from Google Sheets:', e);
-      }
+      } catch (e) {}
     }
 
     if (!productId) return questions;
     return questions.filter((q) => q.productId === productId || q.productId === 'all' || q.productId.includes('ondo'));
   }
 
-  // 5. 설문 피드백 제출
+  // 5. 설문 피드백 제출 (로컬 즉시 저장 + 비동기 구글 시트 전송으로 지연시간 0초)
   public static async submitFeedback(submission: FeedbackSubmission): Promise<{ success: boolean; message?: string }> {
-    const url = this.getWebhookUrl();
-    
     if (typeof window !== 'undefined') {
       const existingStr = localStorage.getItem('jnj_local_feedbacks');
       const existingList: FeedbackSubmission[] = existingStr ? JSON.parse(existingStr) : [];
@@ -652,32 +655,20 @@ export class GoogleSheetsService {
       localStorage.setItem('jnj_local_feedbacks', JSON.stringify([newSubmission, ...existingList]));
     }
 
-    if (!url) {
-      return { success: true, message: 'Saved to local database.' };
-    }
-
-    try {
-      const response = await fetch(url, {
+    const url = this.getWebhookUrl();
+    if (url) {
+      // 비동기 백그라운드 전송 (Fire-and-Forget)
+      fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
-        },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'submitFeedback',
           payload: submission,
         }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        return { success: true, message: result.message || 'Successfully recorded to Google Sheets.' };
-      }
-    } catch (e: any) {
-      console.error('Error submitting feedback to Google Sheets:', e);
-      return { success: true, message: 'Saved locally.' };
+      }).catch((err) => console.warn('Background sync warning:', err));
     }
 
-    return { success: true };
+    return { success: true, message: 'Saved successfully.' };
   }
 
   // 6. 피드백 목록 전체 조회
@@ -687,19 +678,23 @@ export class GoogleSheetsService {
 
     if (url) {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+
         const response = await fetch(`${url}?action=getFeedbacks`, {
           method: 'GET',
           cache: 'no-store',
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
+
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data)) {
             remoteFeedbacks = data;
           }
         }
-      } catch (e) {
-        console.warn('Failed to fetch feedbacks from Google Sheets:', e);
-      }
+      } catch (e) {}
     }
 
     let localFeedbacks: FeedbackSubmission[] = [];

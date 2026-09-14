@@ -92,26 +92,24 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
       sentiment: overallRating >= 4 ? 'positive' : overallRating === 3 ? 'neutral' : 'negative',
     };
 
+    // 1. 세션 스토리지 즉시 저장 및 화면 전환 (0.1초 즉시 이동)
+    sessionStorage.setItem('jnj_latest_submission', JSON.stringify(submission));
+    sessionStorage.setItem('jnj_latest_product', JSON.stringify(product));
+
     try {
-      await GoogleSheetsService.submitFeedback(submission);
+      confetti({
+        particleCount: 100,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#7A9578', '#B09540', '#D7C787', '#485E47'],
+      });
+    } catch (err) {}
 
-      try {
-        confetti({
-          particleCount: 100,
-          spread: 80,
-          origin: { y: 0.6 },
-          colors: ['#7A9578', '#B09540', '#D7C787', '#485E47'],
-        });
-      } catch (err) {}
+    // 2. 구글 시트 백그라운드 비동기 저장 (사용자 대기시간 0초)
+    GoogleSheetsService.submitFeedback(submission).catch(() => {});
 
-      sessionStorage.setItem('jnj_latest_submission', JSON.stringify(submission));
-      sessionStorage.setItem('jnj_latest_product', JSON.stringify(product));
-      
-      router.push(`/result?productId=${product.id}`);
-    } catch (error) {
-      console.error('Submission failed:', error);
-      setIsSubmitting(false);
-    }
+    // 3. 결과 페이지로 즉시 이동
+    router.push(`/result?productId=${product.id}`);
   };
 
   const stepTitles = [

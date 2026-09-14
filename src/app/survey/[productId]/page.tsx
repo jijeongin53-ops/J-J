@@ -3,46 +3,37 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useI18n } from '@/lib/i18n';
-import { GoogleSheetsService, MOCK_PRODUCTS } from '@/lib/sheets';
+import { GoogleSheetsService, ONDO_ECO_RESONANCE_PRODUCT, ONDO_SURVEY_QUESTIONS, MOCK_PRODUCTS } from '@/lib/sheets';
 import { WellnessProduct, SurveyQuestion } from '@/lib/types';
 import { SurveyForm } from '@/components/SurveyForm';
-import { ArrowLeft, Sparkles, Leaf, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 export default function ProductSurveyPage() {
   const params = useParams();
-  const router = useRouter();
   const { language, t, getLocalizedText } = useI18n();
 
   const productId = (params.productId as string) || 'ondo-eco-resonance-01';
 
-  const [product, setProduct] = useState<WellnessProduct | null>(null);
-  const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 0초 즉시 렌더링: 기본 ONDO 상품 및 22개 문항으로 즉시 화면 표시
+  const [product, setProduct] = useState<WellnessProduct>(ONDO_ECO_RESONANCE_PRODUCT);
+  const [questions, setQuestions] = useState<SurveyQuestion[]>(ONDO_SURVEY_QUESTIONS);
 
   useEffect(() => {
-    async function loadData() {
-      setLoading(true);
+    // 백그라운드에서 구글 시트 / 로컬 스토리지 최신 데이터 동기화
+    async function syncLatestData() {
       const allProducts = await GoogleSheetsService.fetchProducts();
-      const targetProduct = allProducts.find((p) => p.id === productId) || allProducts[0] || MOCK_PRODUCTS[0];
+      const targetProduct = allProducts.find((p) => p.id === productId) || allProducts[0] || ONDO_ECO_RESONANCE_PRODUCT;
       setProduct(targetProduct);
 
       const qList = await GoogleSheetsService.fetchQuestions(targetProduct.id);
-      setQuestions(qList);
-      setLoading(false);
+      if (qList && qList.length > 0) {
+        setQuestions(qList);
+      }
     }
-    loadData();
+    syncLatestData();
   }, [productId]);
-
-  if (loading || !product) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
-        <div className="w-10 h-10 border-3 border-wellness-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-medium text-wellness-700">{t.common.loading}</p>
-      </div>
-    );
-  }
 
   const name = getLocalizedText(product.name);
   const category = getLocalizedText(product.category);
@@ -50,7 +41,7 @@ export default function ProductSurveyPage() {
   const benefits = product.keyBenefits[language] || product.keyBenefits.en || [];
 
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-10 space-y-6">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-10 space-y-6 animate-fade-in">
       
       {/* Back to Products Navigation */}
       <div>
@@ -63,13 +54,14 @@ export default function ProductSurveyPage() {
         </Link>
       </div>
 
-      {/* Selected Product Hero Summary Banner (모바일 반응형) */}
+      {/* Selected Product Summary Banner */}
       <div className="bg-white rounded-3xl p-5 sm:p-8 border border-wellness-100 shadow-card flex flex-col sm:flex-row items-center gap-5 sm:gap-8">
         <div className="relative w-full h-44 sm:w-40 sm:h-40 rounded-2xl overflow-hidden bg-sand-100 flex-shrink-0 shadow-inner">
           <Image
             src={product.imageUrl}
             alt={name}
             fill
+            priority
             className="object-cover"
           />
         </div>
