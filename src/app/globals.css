@@ -7,18 +7,21 @@
 :root {
   --background: #FAF9F6;
   --foreground: #182118;
+  color-scheme: light; /* 모바일 강제 다크모드 색상 왜곡 방지 */
 }
 
-body {
+html, body {
   color: var(--foreground);
-  background: var(--background);
+  background-color: var(--background);
   font-family: 'Plus Jakarta Sans', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  word-break: keep-all; /* 단어 단위 줄바꿈으로 가독성 극대화 */
 }
 
 h1, h2, h3, .font-serif {
   font-family: 'Playfair Display', Georgia, serif;
+  word-break: keep-all;
 }
 
 /* Custom subtle scrollbar */

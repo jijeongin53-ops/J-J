@@ -6,7 +6,7 @@ import { WellnessProduct, SurveyQuestion, FeedbackSubmission } from '@/lib/types
 import { useI18n } from '@/lib/i18n';
 import { GoogleSheetsService } from '@/lib/sheets';
 import { StarRating } from './StarRating';
-import { Sparkles, ArrowRight, ArrowLeft, Send, CheckCircle2, UserCheck, HeartHandshake } from 'lucide-react';
+import { Sparkles, ArrowRight, ArrowLeft, Send, CheckCircle2, UserCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface SurveyFormProps {
@@ -31,10 +31,6 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
   const [comment, setComment] = useState('');
 
   // 스텝 관리 (4개 파트)
-  // Step 0: Part 1. 전체적인 감성 경험 (Q1 ~ Q5)
-  // Step 1: Part 2. 웰니스 요소 상세 평가 (Q6 ~ Q13)
-  // Step 2: Part 3. 데이터 보강 질문 (Q14 ~ Q19)
-  // Step 3: Part 4. 자유 의견 & 게스트 정보 (Q20 ~ Q22 + 프로필)
   const [currentStep, setCurrentStep] = useState<number>(0);
   const totalSteps = 4;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -140,14 +136,14 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
     <div className="w-full max-w-4xl mx-auto bg-white rounded-3xl border border-wellness-100 shadow-luxury overflow-hidden animate-fade-in">
       
       {/* Progress Bar Header */}
-      <div className="px-6 sm:px-10 pt-8 pb-5 border-b border-wellness-100/80 bg-sand-50/50">
-        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-wellness-600 mb-2.5">
-          <span className="font-bold text-wellness-900">{stepTitles[currentStep]}</span>
-          <span>
+      <div className="px-4 sm:px-10 pt-6 sm:pt-8 pb-4 sm:pb-5 border-b border-wellness-100/80 bg-sand-50/50">
+        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-wellness-600 mb-2">
+          <span className="font-bold text-wellness-900 text-[11px] sm:text-xs">{stepTitles[currentStep]}</span>
+          <span className="text-[11px] sm:text-xs">
             {t.survey.step} {currentStep + 1} / {totalSteps}
           </span>
         </div>
-        <div className="w-full h-2 bg-wellness-100 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 sm:h-2 bg-wellness-100 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-wellness-600 via-wellness-500 to-gold-500 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercentage}%` }}
@@ -156,41 +152,41 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
       </div>
 
       {/* Form Content Body */}
-      <div className="p-6 sm:p-10 space-y-8">
+      <div className="p-4 sm:p-10 space-y-6 sm:space-y-8">
         
         {/* Step 0일 때 상단 전반적 만족도 별점 평가 */}
         {currentStep === 0 && (
-          <div className="p-6 rounded-3xl bg-sand-50/60 border border-wellness-100/80 text-center space-y-3">
-            <span className="inline-block px-3 py-1 rounded-full bg-wellness-100 text-wellness-800 text-[11px] font-bold tracking-wider uppercase">
+          <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-sand-50/70 border border-wellness-100 text-center space-y-2.5">
+            <span className="inline-block px-2.5 py-0.5 rounded-full bg-wellness-100 text-wellness-800 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase">
               Overall Experience
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-wellness-950">
+            <h3 className="font-serif text-lg sm:text-2xl font-bold text-wellness-950">
               {t.survey.overallRatingTitle}
             </h3>
-            <div className="pt-2">
+            <div className="pt-1">
               <StarRating value={overallRating} onChange={setOverallRating} size="lg" />
             </div>
           </div>
         )}
 
         {/* 파트별 문항 렌더링 리스트 */}
-        <div className="space-y-8">
-          {currentQuestions.map((q, idx) => {
+        <div className="space-y-5 sm:space-y-6">
+          {currentQuestions.map((q) => {
             const qTitle = getLocalizedText(q.title);
             const currentAns = answers[q.id];
             const placeholder = q.placeholder ? getLocalizedText(q.placeholder) : '';
 
             return (
-              <div key={q.id} className="p-6 rounded-2xl bg-sand-50/40 border border-wellness-100 space-y-4">
+              <div key={q.id} className="p-4 sm:p-6 rounded-2xl bg-sand-50/40 border border-wellness-100 space-y-3.5">
                 <div>
-                  <h4 className="font-serif text-base sm:text-lg font-bold text-wellness-950 leading-snug">
+                  <h4 className="font-serif text-sm sm:text-base font-bold text-wellness-950 leading-snug">
                     {qTitle}
                   </h4>
                 </div>
 
                 {/* Single Choice Options */}
                 {q.type === 'single_choice' && q.options && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {q.options.map((opt) => {
                       const optLabel = getLocalizedText(opt.label);
                       const isSelected = currentAns === opt.value;
@@ -199,7 +195,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
                           key={opt.value}
                           type="button"
                           onClick={() => handleSingleSelect(q.id, opt.value)}
-                          className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 flex items-center justify-between group ${
+                          className={`w-full text-left p-3 sm:p-4 rounded-xl border transition-all duration-200 flex items-center justify-between group active:scale-[0.99] ${
                             isSelected
                               ? 'bg-wellness-800 text-gold-100 border-wellness-900 shadow-sm ring-1 ring-wellness-600'
                               : 'bg-white border-wellness-100 text-wellness-900 hover:border-wellness-300 hover:bg-wellness-50/50'
@@ -209,7 +205,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
                             {optLabel}
                           </span>
                           <div
-                            className={`w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0 ml-2.5 transition-colors ${
+                            className={`w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0 ml-2 transition-colors ${
                               isSelected ? 'border-gold-300 bg-gold-400 text-wellness-950' : 'border-neutral-300'
                             }`}
                           >
@@ -223,7 +219,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
 
                 {/* Multi Choice Options */}
                 {q.type === 'multi_choice' && q.options && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {q.options.map((opt) => {
                       const optLabel = getLocalizedText(opt.label);
                       const selectedList: string[] = Array.isArray(currentAns) ? currentAns : [];
@@ -233,7 +229,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
                           key={opt.value}
                           type="button"
                           onClick={() => handleMultiSelect(q.id, opt.value)}
-                          className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 flex items-center justify-between ${
+                          className={`w-full text-left p-3 sm:p-4 rounded-xl border transition-all duration-200 flex items-center justify-between active:scale-[0.99] ${
                             isSelected
                               ? 'bg-wellness-800 text-gold-100 border-wellness-900 shadow-sm ring-1 ring-wellness-600'
                               : 'bg-white border-wellness-100 text-wellness-900 hover:border-wellness-300 hover:bg-wellness-50/50'
@@ -243,7 +239,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
                             {optLabel}
                           </span>
                           <div
-                            className={`w-4 h-4 rounded-md border flex items-center justify-center flex-shrink-0 ml-2.5 transition-colors ${
+                            className={`w-4 h-4 rounded-md border flex items-center justify-center flex-shrink-0 ml-2 transition-colors ${
                               isSelected ? 'border-gold-300 bg-gold-400 text-wellness-950' : 'border-neutral-300'
                             }`}
                           >
@@ -263,7 +259,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
                       value={currentAns || ''}
                       onChange={(e) => handleSingleSelect(q.id, e.target.value)}
                       placeholder={placeholder || '소중한 의견을 자유롭게 남겨주세요...'}
-                      className="w-full p-4 rounded-xl border border-wellness-200 focus:border-wellness-700 focus:ring-2 focus:ring-wellness-500/20 text-xs sm:text-sm text-wellness-900 bg-white transition-all outline-none"
+                      className="w-full p-3 sm:p-4 rounded-xl border border-wellness-200 focus:border-wellness-700 focus:ring-2 focus:ring-wellness-500/20 text-xs sm:text-sm text-wellness-900 bg-white transition-all outline-none"
                     />
                   </div>
                 )}
@@ -274,13 +270,13 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
 
         {/* Step 3 (Part 4)일 때 하단 게스트 프로필 입력란 */}
         {currentStep === 3 && (
-          <div className="p-6 rounded-2xl bg-sand-50/80 border border-wellness-100 space-y-4 animate-slide-up">
-            <div className="flex items-center gap-2 text-wellness-900 font-serif font-bold text-base">
+          <div className="p-4 sm:p-6 rounded-2xl bg-sand-50/80 border border-wellness-100 space-y-3.5 animate-slide-up">
+            <div className="flex items-center gap-2 text-wellness-900 font-serif font-bold text-sm sm:text-base">
               <UserCheck className="w-4 h-4 text-wellness-700" />
               <span>게스트 정보 (맞춤 웰니스 리포트 및 감사 바우처 수신용)</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="text-[11px] font-semibold text-wellness-700 block mb-1">
                   국적 / 거주 국가
@@ -290,7 +286,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
                   value={nationality}
                   onChange={(e) => setNationality(e.target.value)}
                   placeholder="예: 미국, 싱가포르, 일본, 영국, 한국..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-wellness-200 text-xs text-wellness-900 bg-white focus:outline-none focus:border-wellness-600"
+                  className="w-full px-3 py-2.5 rounded-xl border border-wellness-200 text-xs text-wellness-900 bg-white focus:outline-none focus:border-wellness-600"
                 />
               </div>
 
@@ -303,7 +299,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="yourname@example.com"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-wellness-200 text-xs text-wellness-900 bg-white focus:outline-none focus:border-wellness-600"
+                  className="w-full px-3 py-2.5 rounded-xl border border-wellness-200 text-xs text-wellness-900 bg-white focus:outline-none focus:border-wellness-600"
                 />
               </div>
             </div>
@@ -312,21 +308,21 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
 
         {/* Error Notice */}
         {validationError && (
-          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-medium">
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-medium">
             ⚠️ {validationError}
           </div>
         )}
 
         {/* Navigation Buttons Footer */}
-        <div className="pt-6 border-t border-wellness-100 flex items-center justify-between gap-4">
+        <div className="pt-4 border-t border-wellness-100 flex items-center justify-between gap-3">
           {currentStep > 0 ? (
             <button
               type="button"
               onClick={handlePrev}
-              className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-wellness-200 hover:bg-wellness-50 text-wellness-800 text-xs sm:text-sm font-semibold transition-all active:scale-95"
+              className="flex items-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl border border-wellness-200 hover:bg-wellness-50 text-wellness-800 text-xs sm:text-sm font-semibold transition-all active:scale-95"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>{t.survey.prevBtn}</span>
+              <span>이전</span>
             </button>
           ) : (
             <div />
@@ -336,7 +332,7 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
             <button
               type="button"
               onClick={handleNext}
-              className="flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-wellness-800 hover:bg-wellness-900 text-white text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95 ml-auto"
+              className="flex items-center gap-1.5 px-5 py-2.5 sm:px-7 sm:py-3 rounded-xl sm:rounded-2xl bg-wellness-800 hover:bg-wellness-900 text-white text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95 ml-auto"
             >
               <span>다음 파트 ({currentStep + 2}/{totalSteps})</span>
               <ArrowRight className="w-4 h-4" />
@@ -346,18 +342,18 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
               type="button"
               disabled={isSubmitting}
               onClick={handleSubmit}
-              className="flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-gradient-to-r from-wellness-800 via-wellness-700 to-gold-600 hover:brightness-105 text-white text-xs sm:text-sm font-bold shadow-lg transition-all active:scale-95 ml-auto disabled:opacity-50"
+              className="flex items-center gap-1.5 px-5 py-2.5 sm:px-7 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-wellness-800 via-wellness-700 to-gold-600 hover:brightness-105 text-white text-xs sm:text-sm font-bold shadow-lg transition-all active:scale-95 ml-auto disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>피드백을 제출하고 있습니다...</span>
+                  <span>제출 중...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 text-gold-300" />
-                  <span>설문 완료 &amp; 맞춤 처방 솔루션 받기</span>
-                  <Send className="w-3.5 h-3.5 ml-1" />
+                  <span>설문 완료 &amp; 맞춤 처방 받기</span>
+                  <Send className="w-3.5 h-3.5 ml-0.5" />
                 </>
               )}
             </button>
