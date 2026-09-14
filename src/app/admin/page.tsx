@@ -141,7 +141,7 @@ export default function AdminPage() {
               관리 &amp; 분석 센터 인증
             </h2>
             <p className="text-xs text-wellness-600 mt-2">
-              관리자 접근을 위해 암호를 입력해 주세요. (초기 암호: <span className="font-mono font-bold text-wellness-900">0000</span>)
+              관리자 접근을 위해 암호를 입력해 주세요.
             </p>
           </div>
 
