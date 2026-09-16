@@ -37,8 +37,8 @@ export class EnhancementEngine {
         ],
         pairingRecommendations: [
           {
-            productName: 'Program #2 Coastal Serenity (해안 요가 & 테라피)',
-            benefit: '심신 활력 증진 및 전신 림프 순환',
+            productName: 'Oryukdo Islets Wellness Private Tour (오륙도 코스탈 세레니티)',
+            benefit: '심신 활력 증진 및 백련사 사찰 리추얼',
             reason: '에코 레조넌스의 정적인 이완과 결합하여 동적 웰니스 시너지를 극대화합니다.',
           },
           {

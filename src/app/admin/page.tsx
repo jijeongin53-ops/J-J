@@ -63,7 +63,8 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === ADMIN_PASSWORD_INITIAL) {
+    const cleanInput = passwordInput.trim();
+    if (cleanInput === ADMIN_PASSWORD_INITIAL) {
       setIsAuthenticated(true);
       sessionStorage.setItem('jnj_admin_authenticated', 'true');
       setAuthError(null);

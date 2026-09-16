@@ -30,7 +30,7 @@ const SHEET_INSIGHTS = "Insights";
 function initSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  // 1. Products 시트 초기화 (ONDO ECO RESONANCE 상품)
+  // 1. Products 시트 초기화 (ONDO ECO RESONANCE & COASTAL SERENITY 상품)
   let sheetProducts = ss.getSheetByName(SHEET_PRODUCTS);
   if (!sheetProducts) sheetProducts = ss.insertSheet(SHEET_PRODUCTS);
   sheetProducts.clear();
@@ -42,16 +42,30 @@ function initSheets() {
   sheetProducts.appendRow([
     "ondo-eco-resonance-01",
     "ondo-eco-resonance",
-    "Program #1 ECO RESONANCE: Healing Beyond Humans",
-    "Program #1 ECO RESONANCE（エコー・レゾナンス）",
-    "Program #1 ECO RESONANCE：生态共鸣身心疗愈",
-    "Program #1 ECO RESONANCE (에코 레조넌스)",
+    "Eulsukdo Island Wellness Private Tour",
+    "Eulsukdo Island Wellness Private Tour（乙淑島）",
+    "Eulsukdo Island Wellness Private Tour（乙淑岛）",
+    "Eulsukdo Island Wellness Private Tour (을숙도 에코 레조넌스)",
     "Eco & Sunset Soundbath Ritual",
     "4-Hour Sunset Soundbath & Eco-Sanctuary Healing Journey where river meets the sea ($186 USD).",
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    "/images/eulsukdo_main.jpg",
     "4-Hour Sunset Ritual",
     "Golden Hour Sunset Soundbath & Singing Bowl | Eco-Sanctuary Cart Tour & Wildlife Center | Private Vehicle Pick-up & English Expert",
     "Private Pick-up/Drop-off, English Wellness Expert, Singing Bowl Session, Eco-Center Pass, Local Gift"
+  ]);
+  sheetProducts.appendRow([
+    "ondo-coastal-serenity-02",
+    "ondo-coastal-serenity",
+    "Oryukdo Islets Wellness Private Tour",
+    "Oryukdo Islets Wellness Private Tour（五六島）",
+    "Oryukdo Islets Wellness Private Tour（五六岛）",
+    "Oryukdo Islets Wellness Private Tour (오륙도 코스탈 세레니티)",
+    "Coastal Wellness & Temple Ritual",
+    "4-Hour Private Coastal Soundbath & Temple Reflection Ritual at Oryukdo Islets ($170 USD).",
+    "/images/oryukdo_main.jpg",
+    "4-Hour Coastal Ritual",
+    "Sunrise Park Outdoor Soundbath & Singing Bowl | Oryukdo Coastal Storytelling & Skywalk | Baekryeonsa Temple Reflection Ritual",
+    "Private Pick-up/Drop-off, English Wellness Expert, Soundbath Session, Temple Ritual, Local Gift"
   ]);
   formatHeaderRow(sheetProducts);
 

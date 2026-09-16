@@ -9,9 +9,9 @@ import { ProductCard } from '@/components/ProductCard';
 import { Leaf, Award, Globe2, Plus, ArrowRight } from 'lucide-react';
 
 export default function HomePage() {
-  const { t } = useI18n();
+  const { t, getLocalizedText } = useI18n();
   const [products, setProducts] = useState<WellnessProduct[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedProductId, setSelectedProductId] = useState<string>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,12 +25,8 @@ export default function HomePage() {
   }, []);
 
   const filteredProducts = products.filter((p) => {
-    if (selectedCategory === 'all') return true;
-    const cat = (p.category.en || '').toLowerCase();
-    if (selectedCategory === 'skincare') return cat.includes('skin');
-    if (selectedCategory === 'aroma') return cat.includes('aroma') || cat.includes('sound');
-    if (selectedCategory === 'supplements') return cat.includes('inner') || cat.includes('tea') || cat.includes('eco');
-    return true;
+    if (selectedProductId === 'all') return true;
+    return p.id === selectedProductId;
   });
 
   return (
@@ -52,47 +48,30 @@ export default function HomePage() {
           </p>
 
           {products.length > 0 && (
-            <div className="pt-3 flex items-center justify-center gap-1.5 sm:gap-2 overflow-x-auto pb-1">
+            <div className="pt-3 flex items-center justify-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 max-w-full">
               <button
-                onClick={() => setSelectedCategory('all')}
+                onClick={() => setSelectedProductId('all')}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                  selectedCategory === 'all'
+                  selectedProductId === 'all'
                     ? 'bg-wellness-800 text-gold-200 shadow-sm'
                     : 'bg-white border border-wellness-200 text-wellness-700 hover:bg-wellness-50'
                 }`}
               >
                 {t.products.filterAll}
               </button>
-              <button
-                onClick={() => setSelectedCategory('skincare')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                  selectedCategory === 'skincare'
-                    ? 'bg-wellness-800 text-gold-200 shadow-sm'
-                    : 'bg-white border border-wellness-200 text-wellness-700 hover:bg-wellness-50'
-                }`}
-              >
-                {t.products.filterSkincare}
-              </button>
-              <button
-                onClick={() => setSelectedCategory('aroma')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                  selectedCategory === 'aroma'
-                    ? 'bg-wellness-800 text-gold-200 shadow-sm'
-                    : 'bg-white border border-wellness-200 text-wellness-700 hover:bg-wellness-50'
-                }`}
-              >
-                {t.products.filterAroma}
-              </button>
-              <button
-                onClick={() => setSelectedCategory('supplements')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                  selectedCategory === 'supplements'
-                    ? 'bg-wellness-800 text-gold-200 shadow-sm'
-                    : 'bg-white border border-wellness-200 text-wellness-700 hover:bg-wellness-50'
-                }`}
-              >
-                {t.products.filterSupplements}
-              </button>
+              {products.map((product) => (
+                <button
+                  key={product.id}
+                  onClick={() => setSelectedProductId(product.id)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                    selectedProductId === product.id
+                      ? 'bg-wellness-800 text-gold-200 shadow-sm'
+                      : 'bg-white border border-wellness-200 text-wellness-700 hover:bg-wellness-50'
+                  }`}
+                >
+                  {getLocalizedText(product.name)}
+                </button>
+              ))}
             </div>
           )}
         </div>

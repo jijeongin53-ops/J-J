@@ -26,7 +26,7 @@ export const zh = {
     },
   },
   products: {
-    sectionTitle: "请选择您体验过的J&J产品",
+    sectionTitle: "请分享您所体验的ONDO",
     sectionSubtitle: "我们将根据所选产品呈现专属的深度评价问卷。",
     startSurvey: "开始产品反馈",
     viewDetails: "核心功效",

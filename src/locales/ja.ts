@@ -26,7 +26,7 @@ export const ja = {
     },
   },
   products: {
-    sectionTitle: "体験されたJ&J商品をお選びください",
+    sectionTitle: "あなたが体験したONDOを教えてください",
     sectionSubtitle: "製品ごとの最適な評価アンケートを開始します。",
     startSurvey: "フィードバックを始める",
     viewDetails: "主な効果",

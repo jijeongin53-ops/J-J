@@ -26,7 +26,7 @@ export const en = {
     },
   },
   products: {
-    sectionTitle: "Select Your J&J Wellness Product",
+    sectionTitle: "Tell us about your ONDO experience",
     sectionSubtitle: "Please choose the product you experienced to begin the personalized evaluation.",
     startSurvey: "Begin Evaluation",
     viewDetails: "Key Benefits",

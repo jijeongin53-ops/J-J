@@ -26,7 +26,7 @@ export const ko = {
     },
   },
   products: {
-    sectionTitle: "경험하신 J&J 웰니스 상품을 선택해주세요",
+    sectionTitle: "내가 경험한 ONDO를 알려주세요",
     sectionSubtitle: "선택하신 상품에 맞춰 최적화된 맞춤 평가 설문이 진행됩니다.",
     startSurvey: "평가 시작하기",
     viewDetails: "주요 효능",
