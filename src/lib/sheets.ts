@@ -82,7 +82,7 @@ export const ONDO_COASTAL_SERENITY_PRODUCT: WellnessProduct = {
     ja: '専用車送迎、英語ウェルネスエキスパート、五六島地質・海女ストーリーテリング、スカイウォーク、日の出公園屋外サウンドバス、白蓮寺リチュアルを含む。',
     zh: '包含专车接送、英文健康专家、五六岛地质与海女文化讲解、天空步道体验、日出公园户外颂钵、白莲寺静心祈愿仪式及特色礼品。',
   },
-  imageUrl: '/images/oryukdo_main.jpg',
+  imageUrl: '/images/oryukdo_main.jpg?v=2',
   badge: {
     ko: '4시간 코스탈 리추얼',
     en: '4-Hour Coastal Ritual',
