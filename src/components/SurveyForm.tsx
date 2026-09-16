@@ -74,14 +74,54 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const npsAnswer = answers['ondo_cs_q22_recommendation_nps'] || answers['ondo_q18_nps_recommendation'];
+    const calculatedNps =
+      npsAnswer === 'promoter_9_10'
+        ? 10
+        : npsAnswer === 'passive_7_8'
+        ? 8
+        : npsAnswer === 'neutral_5_6'
+        ? 6
+        : npsAnswer === 'detractor_0_4'
+        ? 3
+        : 10;
+
+    const detailedAnswers = questions.map((q) => {
+      const qTitle = getLocalizedText(q.title) || q.id;
+      const rawVal = answers[q.id];
+      let answerText = '';
+
+      if (rawVal !== undefined && rawVal !== null && rawVal !== '') {
+        if (q.type === 'multi_choice' && Array.isArray(rawVal)) {
+          const labels = rawVal.map((v) => {
+            const opt = q.options?.find((o) => o.value === v);
+            return opt ? getLocalizedText(opt.label) : v;
+          });
+          answerText = labels.join(', ');
+        } else if (q.type === 'single_choice') {
+          const opt = q.options?.find((o) => o.value === rawVal);
+          answerText = opt ? getLocalizedText(opt.label) : String(rawVal);
+        } else {
+          answerText = String(rawVal);
+        }
+      }
+
+      return {
+        questionId: q.id,
+        questionTitle: qTitle,
+        answerText,
+      };
+    });
+
     const submission: FeedbackSubmission = {
       productId: product.id,
       productName: getLocalizedText(product.name),
       language,
       overallRating,
-      npsScore: answers['ondo_q18_nps_recommendation'] === 'promoter_9_10' ? 10 : answers['ondo_q18_nps_recommendation'] === 'passive_7_8' ? 8 : 6,
+      npsScore: calculatedNps,
       answers,
-      comment: answers['ondo_q20_best_scene'] || comment,
+      detailedAnswers,
+      comment: answers['ondo_cs_q24_best_scene'] || answers['ondo_q20_best_scene'] || comment,
       userProfile: {
         nationality,
         ageGroup,

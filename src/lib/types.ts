@@ -50,6 +50,12 @@ export interface SurveyAnswer {
   value: string | number | string[];
 }
 
+export interface DetailedAnswerItem {
+  questionId: string;
+  questionTitle: string;
+  answerText: string;
+}
+
 export interface FeedbackSubmission {
   id?: string;
   timestamp?: string;
@@ -66,6 +72,7 @@ export interface FeedbackSubmission {
   overallRating: number; // 1 ~ 5
   npsScore?: number; // 0 ~ 10
   answers: Record<string, any>;
+  detailedAnswers?: DetailedAnswerItem[];
   comment?: string;
   sentiment?: 'positive' | 'neutral' | 'negative';
 }
