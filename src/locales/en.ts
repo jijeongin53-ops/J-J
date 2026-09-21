@@ -54,7 +54,7 @@ export const en = {
     ageGroupLabel: "Age Group",
     genderLabel: "Gender",
     wellnessGoalLabel: "Primary Wellness Goal",
-    emailLabel: "Email (To receive your customized wellness ritual report & gift voucher)",
+    emailLabel: "Email (To receive your customized wellness ritual report)",
     emailPlaceholder: "yourname@example.com",
     additionalComments: "Any additional thoughts or suggestions for improvement?",
     additionalPlaceholder: "Please share details on texture, aroma, packaging, or skin sensation...",

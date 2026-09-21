@@ -54,7 +54,7 @@ export const ko = {
     ageGroupLabel: "연령대",
     genderLabel: "성별",
     wellnessGoalLabel: "주요 웰니스 목표",
-    emailLabel: "이메일 (맞춤형 웰니스 처방 리포트 및 감사 쿠폰 수신용)",
+    emailLabel: "이메일 (맞춤형 웰니스 처방 리포트 수신용)",
     emailPlaceholder: "yourname@example.com",
     additionalComments: "제형, 향, 패키지, 효능 등 추가 의견이나 개선점이 있으신가요?",
     additionalPlaceholder: "사용감이나 텍스처, 용기 편의성 등 솔직한 의견을 남겨주세요...",

@@ -132,7 +132,8 @@ export function WellnessSolutionCard({ solution }: WellnessSolutionCardProps) {
       </div>
 
       {/* Gratitude Voucher Card */}
-      {solution.specialCouponCode && (
+      {/* 바우처 카드 비활성화 (사용자 요청에 따라 숨김 처리) */}
+      {false && solution.specialCouponCode && (
         <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-gold-50 via-sand-50 to-gold-100/80 border border-gold-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-gold-400/20 border border-gold-300/40 flex items-center justify-center text-gold-700 flex-shrink-0">
