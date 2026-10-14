@@ -103,9 +103,58 @@ export const ONDO_COASTAL_SERENITY_PRODUCT: WellnessProduct = {
   },
 };
 
+export const ONDO_GRAIN_OF_SOUND_PRODUCT: WellnessProduct = {
+  id: 'ondo-grain-of-sound-03',
+  slug: 'ondo-grain-of-sound',
+  name: {
+    ko: 'Grain of Sound : 소리의 결 (을숙도 자연치유 × 부산비엔날레)',
+    en: 'Grain of Sound (Eulsukdo Nature Healing × Busan Biennale)',
+    ja: 'Grain of Sound : 音のキメ（乙淑島自然治癒 × 釜山ビエンナーレ）',
+    zh: 'Grain of Sound : 声之纹理（乙淑岛自然疗愈 × 釜山双年展）',
+  },
+  category: {
+    ko: 'ONDO × 아르프 을숙 · 사운드 & 아트 리추얼',
+    en: 'Nature Healing × Sound Art × Dining',
+    ja: '自然治癒 × サウンドアート × ダイニング',
+    zh: '自然疗愈 × 声音艺术展 × 景观餐饮',
+  },
+  tagline: {
+    ko: '을숙도의 숲과 잔디밭에서 자연의 소리를 몸으로 먼저 만나고, 미술관의 사운드 전시와 하루의 마지막 미식으로 이어지는 하루 (4시간 코스)',
+    en: 'Meet the sounds of nature through barefoot grounding and singing bowls in Eulsukdo forest, followed by Busan Biennale sound art and rooftop dining (4-Hour Course).',
+    ja: '乙淑島の森と芝生で自然の音を体で感じ、美術館のサウンド展示とルーフトップでの美食へと続く一日（4時間コース）。',
+    zh: '在乙淑岛森林与草坪用身体感受自然之声，随后漫步釜山双年展声音艺术展与屋顶美馔的四小时疗愈之旅。',
+  },
+  description: {
+    ko: '숲 어싱 메디테이션(맨발 걷기) & 잔디밭 싱잉볼 사운드 힐링(1시간), 2026 부산비엔날레 미술관 자유관람(1시간 30분), 아르프 을숙(arp Eulsuk) 루프탑 차담/디너 옵션 및 사전예약 수제도장 기념품(비단 파우치·전통 매듭 노리개·캘리그래피 카드) 포함.',
+    en: 'Includes Forest Earthing Meditation & Lawn Singing Bowl Sound Healing (1 hr), Busan Biennale 2026 Free Viewing (1.5 hrs), optional arp Eulsuk Rooftop Tea/Dinner with seasonal Gamju welcome drink, and Pre-booking Handmade Engraved Stamp Gift.',
+    ja: '森のアーシング瞑想＆芝生シンギングボウル・サウンドヒーリング（1時間）、2026釜山ビエンナーレ自由観覧（1時間30分）、arp Eulsukルーフトップ茶菓/ディナー、事前予約特典の手彫り印鑑ギフトを含む。',
+    zh: '包含森林赤足接地冥想与草坪颂钵音疗（1小时）、2026釜山双年展自由观展（1.5小时）、arp Eulsuk屋顶茶叙/晚宴选配及提前预订专属手工刻印章伴手礼。',
+  },
+  imageUrl: '/images/grain_of_sound_main.jpg',
+  badge: {
+    ko: '비엔날레 스페셜 4시간',
+    en: 'Biennale Special 4-Hr',
+    ja: 'ビエンナーレ特別 4時間',
+    zh: '双年展特辑 4小时',
+  },
+  keyBenefits: {
+    ko: ['을숙도 숲 어싱 메디테이션 & 싱잉볼 사운드 힐링', '2026 부산비엔날레 사운드 전시 자유관람', '아르프 을숙 미식 & 사전예약 수제도장 기념품'],
+    en: ['Forest Earthing Meditation & Singing Bowl Healing', 'Busan Biennale 2026 Sound Exhibition Free Viewing', 'arp Eulsuk Dining & Handmade Engraved Stamp Gift'],
+    ja: ['乙淑島の森アーシング瞑想＆シンギングボウル', '2026釜山ビエンナーレ展示自由観覧', 'arp Eulsukダイニング＆手彫り印鑑記念品'],
+    zh: ['乙淑岛森林接地冥想与颂钵声音疗愈', '2026釜山双年展声音艺术自由观展', 'arp Eulsuk屋顶美馔与定制手工姓名印章礼'],
+  },
+  ingredients: {
+    ko: '포함: 자연 웰니스(어싱+싱잉볼 1시간), 비엔날레 자유관람(1.5시간), 차량 픽업/드롭(선택 시 총 4시간), 사전예약 수제도장 기념품, 디너 예약 시 감주 웰컴드링크',
+    en: 'Includes: Nature Wellness (Earthing + Singing Bowl 1hr), Biennale Viewing (1.5hr), Optional Pick-up/Drop-off (4hr total), Pre-booking Stamp Gift, Welcome Gamju Drink',
+    ja: '含まれるもの：自然ウェルネス（1時間）、ビエンナーレ自由観覧（1.5時間）、専用車送迎（選択時・計4時間）、事前予約印鑑ギフト、ウェルカム甘酒ドリンク',
+    zh: '包含项目：自然疗愈（接地冥想+颂钵1小时）、双年展观展（1.5小时）、专车接送（选配共4小时）、提前预订手工印章礼、迎宾甜米露饮品',
+  },
+};
+
 export const MOCK_PRODUCTS: WellnessProduct[] = [
   ONDO_ECO_RESONANCE_PRODUCT,
   ONDO_COASTAL_SERENITY_PRODUCT,
+  ONDO_GRAIN_OF_SOUND_PRODUCT,
 ];
 
 // 2. ONDO 22개 상세 피드백 문항 정의 (Part 1 ~ Part 4)
@@ -1050,9 +1099,416 @@ export const ONDO_COASTAL_SURVEY_QUESTIONS: SurveyQuestion[] = [
   },
 ];
 
+// 4. Program #3 Grain of Sound : 소리의 결 (을숙도 자연치유 × 부산비엔날레) 21개 상세 피드백 문항 정의 (Part 1 ~ Part 4)
+export const ONDO_GRAIN_OF_SOUND_QUESTIONS: SurveyQuestion[] = [
+  // ================= Part 1. 전체적인 감성 경험 =================
+  {
+    id: 'ondo_gos_q1_feeling',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'satisfaction',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '1. 오늘 하루를 마친 지금 느낌에 가장 가까운 것은?',
+      en: '1. Which best describes how you feel at the end of today?',
+      ja: '1. 今日一日を終えた今の気持ちに最も近いものはどれですか？',
+      zh: '1. 结束今天一天的行程后，最贴近您此刻感受的是？',
+    },
+    options: [
+      { value: 'relaxed_calm', label: { ko: '완전히 이완됨 / 고요함', en: 'Completely relaxed, calm', ja: '完全にリラックス・静けさ', zh: '彻底放松 / 内心平静' } },
+      { value: 'novel_impressive', label: { ko: '새롭고 낯설지만 깊은 인상', en: 'New and unfamiliar, yet deeply memorable', ja: '新しく新鮮で、深い印象が残った', zh: '新颖独特且印象深刻' } },
+      { value: 'joyful_energetic', label: { ko: '즐겁고 활기찬 느낌', en: 'Joyful and energized', ja: '楽しく活気に満ちた気分', zh: '愉悦且充满活力' } },
+      { value: 'mediocre', label: { ko: '기대보다 밋밋했음', en: 'Flatter than I expected', ja: '期待していたより物足りなかった', zh: '比预期略显平淡' } },
+      { value: 'other', label: { ko: '기타', en: 'Other', ja: 'その他', zh: '其他' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q2_day_flow',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'satisfaction',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '2. "자연 치유 → 미술관 자유 관람 → 다이닝"으로 이어지는 하루의 흐름은 어땠나요?',
+      en: '2. How did the flow of the day feel: nature healing → free gallery visit → dining?',
+      ja: '2. 「自然治癒 → 美術館自由観覧 → ダイニング」へと続く一日の流れはいかがでしたか？',
+      zh: '2. “自然疗愈 → 美术馆自由观展 → 餐饮”这一天的整体行程衔接感觉如何？',
+    },
+    options: [
+      { value: 'flowed_naturally', label: { ko: '자연스럽게 잘 이어졌다', en: 'It flowed naturally', ja: '自然にうまくつながっていた', zh: '衔接得非常自然流畅' } },
+      { value: 'slightly_rushed', label: { ko: '괜찮았지만 전환이 다소 급했다', en: 'Good, but the transitions felt a bit rushed', ja: '良かったが、移動や切り替えが少し慌ただしかった', zh: '整体不错，但环节转换略显仓促' } },
+      { value: 'felt_disconnected', label: { ko: '각 요소가 따로 노는 느낌이었다', en: 'The parts felt disconnected', ja: 'それぞれの要素がバラバラに感じられた', zh: '各个环节感觉有些脱节' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q3_tension_release',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'satisfaction',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '3. 몸과 마음의 긴장이 가장 크게 풀렸다고 느낀 순간은?',
+      en: '3. When did you feel the most tension release, in body and mind?',
+      ja: '3. 心身の緊張が最もほぐれたと感じた瞬間はいつですか？',
+      zh: '3. 您感到身心紧绷感最大程度得到释放的时刻是？',
+    },
+    options: [
+      { value: 'forest_grounding', label: { ko: '숲 접지(그라운딩) 명상', en: 'Forest grounding meditation', ja: '森のアーシング（グラウンディング）瞑想', zh: '森林赤足接地（Grounding）冥想' } },
+      { value: 'singing_bowl', label: { ko: '싱잉볼 음향 치유', en: 'Singing bowl sound healing', ja: 'シンギングボウル音響治癒', zh: '颂钵声音疗愈' } },
+      { value: 'biennale_viewing', label: { ko: '비엔날레 전시 관람 중', en: 'While viewing the Biennale', ja: 'ビエンナーレ展示の観覧中', zh: '观赏双年展展览期间' } },
+      { value: 'arp_dining_drinks', label: { ko: 'arp Eulsuk에서의 식사/음료', en: 'Dining or drinks at arp Eulsuk', ja: 'arp Eulsukでの食事・ドリンク', zh: '在 arp Eulsuk 享用餐饮时' } },
+      { value: 'none', label: { ko: '딱히 없었음', en: 'No particular moment', ja: '特になかった', zh: '没有特别明显的时刻' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q4_nature_art_combo',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'satisfaction',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '4. 자연치유(웰니스)와 예술(비엔날레)을 한 번에 경험하는 구성이 신선했나요?',
+      en: '4. Did you find it fresh to experience nature healing (wellness) and art (the Biennale) together?',
+      ja: '4. 自然治癒（ウェルネス）と芸術（ビエンナーレ）を一度に体験する構成は新鮮でしたか？',
+      zh: '4. 将自然疗愈（Wellness）与艺术（双年展）结合在一起体验，您觉得新颖吗？',
+    },
+    options: [
+      { value: 'very_fresh', label: { ko: '매우 신선했다 (이런 조합은 처음)', en: 'Very fresh (my first time with this combination)', ja: 'とても新鮮だった（このような組み合わせは初めて）', zh: '非常新颖（第一次体验这种组合）' } },
+      { value: 'good_combination', label: { ko: '괜찮은 조합이었다', en: 'A good combination', ja: '良い組み合わせだった', zh: '是不错的组合' } },
+      { value: 'no_need_to_combine', label: { ko: '둘을 굳이 합칠 필요는 없어 보였다', en: 'They did not need to be combined', ja: 'あえて二つを合わせる必要はないと感じた', zh: '感觉两者没有必要硬结合在一起' } },
+    ],
+  },
+
+  // ================= Part 2. 웰니스 요소 상세 평가 =================
+  // [숲 접지 명상 & 싱잉볼 음향 치유]
+  {
+    id: 'ondo_gos_q5_session_length',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '5. 세션(그라운딩 명상 + 싱잉볼, 총 1시간) 길이는 어땠나요?',
+      en: '5. How was the length of the session (grounding meditation + singing bowls, 1 hour in total)?',
+      ja: '5. セッション（グラウンディング瞑想＋シンギングボウル、計1時間）の長さはいかがでしたか？',
+      zh: '5. 疗愈环节（接地冥想 + 颂钵，共1小时）的时长感觉如何？',
+    },
+    options: [
+      { value: 'too_short', label: { ko: '너무 짧았다', en: 'Too short', ja: '短すぎた', zh: '太短了' } },
+      { value: 'just_right', label: { ko: '적절했다', en: 'Just right', ja: 'ちょうど良かった', zh: '刚刚好' } },
+      { value: 'wanted_longer', label: { ko: '더 길었으면 했다', en: 'I wanted it longer', ja: 'もう少し長いと良かった', zh: '希望能更长一些' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q6_physical_reactions',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'multi_choice',
+    required: false,
+    title: {
+      ko: '6. 세션 중 나타난 신체 반응은? (해당 항목 모두 선택)',
+      en: '6. Which physical reactions did you notice during the session? (Select all that apply)',
+      ja: '6. セッション中に現れた身体の反応は？（当てはまるものすべて選択）',
+      zh: '6. 在疗愈过程中您注意到了哪些身体反应？（可多选）',
+    },
+    options: [
+      { value: 'slower_breathing', label: { ko: '호흡이 느려짐', en: 'Slower breathing', ja: '呼吸がゆっくりになった', zh: '呼吸变慢' } },
+      { value: 'drowsiness', label: { ko: '졸림 / 잠들 뻔함', en: 'Drowsiness / nearly fell asleep', ja: '眠気・眠りそうになった', zh: '困倦 / 差点睡着' } },
+      { value: 'tears_emotional', label: { ko: '눈물 또는 울컥함', en: 'Tears or welling up', ja: '涙または胸が熱くなった', zh: '流泪或情绪涌动' } },
+      { value: 'body_softened', label: { ko: '몸의 힘이 빠짐 (이완)', en: 'Body softened (relaxation)', ja: '体の力が抜けた（リラックス）', zh: '身体卸力放松' } },
+      { value: 'no_reaction', label: { ko: '특별한 반응 없음', en: 'No particular reaction', ja: '特別な反応なし', zh: '没有特别反应' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q7_barefoot_grounding',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '7. 맨발로 숲/흙을 밟는 접지(그라운딩) 경험 자체는 어땠나요?',
+      en: '7. How was the barefoot grounding experience on the forest floor and soil?',
+      ja: '7. 裸足で森や土を踏むアーシング（グラウンディング）体験そのものはいかがでしたか？',
+      zh: '7. 赤脚踩在森林泥土上的接地（Grounding）体验本身感觉如何？',
+    },
+    options: [
+      { value: 'different_enjoyable', label: { ko: '색다르고 좋았다', en: 'Different and enjoyable', ja: 'ユニークでとても良かった', zh: '非常特别且令人愉悦' } },
+      { value: 'fine', label: { ko: '괜찮았다', en: 'It was fine', ja: '良かった', zh: '还不错' } },
+      { value: 'hygiene_discomfort', label: { ko: '위생/불편함이 신경 쓰였다', en: 'Hygiene or discomfort bothered me', ja: '衛生面や不快感が少し気になった', zh: '有些在意卫生或脚感不适' } },
+      { value: 'did_not_try', label: { ko: '체험하지 않음', en: 'I did not try it', ja: '体験しなかった', zh: '未参与赤脚体验' } },
+    ],
+  },
+
+  // [부산비엔날레 자유 관람]
+  {
+    id: 'ondo_gos_q8_free_viewing',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '8. 가이드 없이 자유롭게 관람하는 방식이 좋았나요?',
+      en: '8. Did you like viewing freely without a guide?',
+      ja: '8. ガイドなしで自由に観覧する方式は良かったですか？',
+      zh: '8. 您喜欢没有导览员、自由观展的方式吗？',
+    },
+    options: [
+      { value: 'liked_own_pace', label: { ko: '좋았다 (내 속도로 볼 수 있어서)', en: 'Yes (I could go at my own pace)', ja: '良かった（自分のペースで見られたので）', zh: '喜欢（可以按自己的节奏观赏）' } },
+      { value: 'wanted_short_intro', label: { ko: '괜찮았지만 간단한 설명은 있었으면 했다', en: 'Fine, but I wanted a short explanation', ja: '良かったが、簡単な解説は欲しかった', zh: '还可以，但希望有简短的导览说明' } },
+      { value: 'unsure_how_to_view', label: { ko: '어떻게 관람해야 할지 막막했다', en: 'I was unsure how to approach it', ja: 'どう観覧すればよいか少し戸惑った', zh: '不知道该如何看起，有些迷茫' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q9_calm_state_effect',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '9. 자연치유 체험 직후의 차분한 상태가 전시 감상에 영향을 주었나요?',
+      en: '9. Did the calm state after the nature healing affect how you experienced the exhibition?',
+      ja: '9. 自然治癒体験直後の落ち着いた状態は、展示の鑑賞に影響を与えましたか？',
+      zh: '9. 自然疗愈体验后平静下来的身心状态，对您欣赏艺术展览有影响吗？',
+    },
+    options: [
+      { value: 'engaged_deeply', label: { ko: '더 깊이 몰입해서 볼 수 있었다', en: 'I could engage more deeply', ja: 'より深く没入して鑑賞できた', zh: '让我能够更深入地沉浸在作品中' } },
+      { value: 'same_as_usual', label: { ko: '평소 관람과 비슷했다', en: 'About the same as usual', ja: '普段の鑑賞と同じくらいだった', zh: '和平时看展差不多' } },
+      { value: 'not_sure', label: { ko: '잘 모르겠다', en: 'Not sure', ja: 'よくわからない', zh: '不太确定' } },
+    ],
+  },
+
+  // [arp Eulsuk 다이닝/차담]
+  {
+    id: 'ondo_gos_q10_arp_visit',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: "10. arp Eulsuk을 방문하셨나요? ('방문함'을 선택하신 분만 다음 문항에 답해주세요)",
+      en: '10. Did you visit arp Eulsuk? (Please answer the next questions only if you visited)',
+      ja: '10. arp Eulsukを訪問されましたか？（「訪問した」を選んだ方のみ次の質問にお答えください）',
+      zh: '10. 您到访 arp Eulsuk 了吗？（仅限选择“到访”的贵宾回答接下来的两题）',
+    },
+    options: [
+      { value: 'visited_dinner', label: { ko: '방문함 (저녁 식사)', en: 'Visited (dinner)', ja: '訪問した（ディナー）', zh: '到访（享用晚餐）' } },
+      { value: 'visited_drinks', label: { ko: '방문함 (음료만)', en: 'Visited (drinks only)', ja: '訪問した（ドリンクのみ）', zh: '到访（仅享饮品）' } },
+      { value: 'did_not_visit', label: { ko: '방문하지 않음', en: 'Did not visit', ja: '訪問していない', zh: '未到访' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q11_arp_space_food',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: false,
+    title: {
+      ko: '11. arp Eulsuk의 공간(강과 바다가 만나는 전망)과 음식/음료는 하루 전체 경험과 잘 어울렸나요?',
+      en: '11. Did the space (where the river meets the sea) and the food and drinks at arp Eulsuk suit the whole day?',
+      ja: '11. arp Eulsukの空間（川と海が出会う展望）や食事・ドリンクは、一日全体の体験とよく調和していましたか？',
+      zh: '11. arp Eulsuk 的空间（江海交汇景观）与餐食/饮品，与全天的体验氛围契合吗？',
+    },
+    options: [
+      { value: 'very_much_highlight', label: { ko: '매우 잘 어울렸다 (하이라이트)', en: 'Very much (a highlight)', ja: 'とてもよく合っていた（ハイライト）', zh: '非常契合（堪称全天高光时刻）' } },
+      { value: 'fine', label: { ko: '괜찮았다', en: 'It was fine', ja: '良かった', zh: '还不错' } },
+      { value: 'out_of_place', label: { ko: '다소 동떨어진 느낌이었다', en: 'It felt somewhat out of place', ja: '少し浮いているように感じた', zh: '感觉有些脱节' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q12_welcome_drink',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: false,
+    title: {
+      ko: '12. 환영 음료(계절 감주) 서비스는 어떠셨나요?',
+      en: '12. How was the welcome drink (seasonal gamju)?',
+      ja: '12. ウェルカムドリンク（季節の甘酒）のサービスはいかがでしたか？',
+      zh: '12. 迎宾饮品（时令甜米露 Gamju）服务体验如何？',
+    },
+    options: [
+      { value: 'felt_special', label: { ko: '특별하게 느껴졌다', en: 'It felt special', ja: '特別に感じられた', zh: '让人感到很特别、很有心意' } },
+      { value: 'ordinary', label: { ko: '평범했다', en: 'Ordinary', ja: '普通だった', zh: '比较普通' } },
+      { value: 'not_received', label: { ko: '받지 못했다 / 기억 안 남', en: 'Did not receive it / do not remember', ja: '受け取っていない・記憶にない', zh: '未收到 / 没印象了' } },
+    ],
+  },
+
+  // ================= Part 3. 데이터 보강 질문 =================
+  {
+    id: 'ondo_gos_q13_who_joined',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '13. 오늘 함께한 인원 구성은?',
+      en: '13. Who joined you today?',
+      ja: '13. 本日ご一緒された方の構成は？',
+      zh: '13. 今天与您同行的人员构成是？',
+    },
+    options: [
+      { value: 'couple', label: { ko: '커플', en: 'Couple', ja: 'カップル・ご夫婦', zh: '情侣 / 夫妻' } },
+      { value: 'family', label: { ko: '가족', en: 'Family', ja: 'ご家族', zh: '家人' } },
+      { value: 'friends', label: { ko: '친구 그룹', en: 'Group of friends', ja: '友人グループ', zh: '朋友结伴' } },
+      { value: 'business_mice', label: { ko: '비즈니스 / MICE 동반', en: 'Business / MICE', ja: 'ビジネス・MICE同伴', zh: '商务 / MICE 同行' } },
+      { value: 'other', label: { ko: '기타', en: 'Other', ja: 'その他（一人旅など）', zh: '其他（如独自出行）' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q14_transport_option',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '14. 차량 포함 옵션을 이용하셨나요?',
+      en: '14. Did you use the transportation option?',
+      ja: '14. 専用車送迎オプションを利用されましたか？',
+      zh: '14. 您使用了包含专车接送的选项吗？',
+    },
+    options: [
+      { value: 'transport_included', label: { ko: '차량 포함 (전체 일정 픽업/드롭)', en: 'Transport included (pickup and drop-off for the whole itinerary)', ja: '車両含む（全日程ピックアップ／ドロップ）', zh: '包含专车（全程接送）' } },
+      { value: 'transport_not_included', label: { ko: '차량 미포함 (자연치유만 고정, 이후 자유 이동)', en: 'Transport not included (nature healing only, then free movement)', ja: '車両なし（自然治癒のみ固定、その後自由移動）', zh: '不含车辆（仅自然疗愈集合，之后自由移动）' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q15_prebooking_gift',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '15. 사전 예약 혜택(이름 각인 수제 도장 등)을 받으셨나요?',
+      en: '15. Did you receive the pre-booking gift (such as a handmade name-engraved stamp)?',
+      ja: '15. 事前予約特典（名前入り手彫り印鑑など）を受け取られましたか？',
+      zh: '15. 您收到提前预订专属礼遇（手工刻制姓名印章等）了吗？',
+    },
+    options: [
+      { value: 'received_loved', label: { ko: '받았고 좋았다', en: 'Received it and loved it', ja: '受け取ってとても気に入った', zh: '收到了，非常喜欢' } },
+      { value: 'received_not_memorable', label: { ko: '받았지만 특별히 인상적이진 않았다', en: 'Received it, but it was not especially memorable', ja: '受け取ったが、特に印象的ではなかった', zh: '收到了，但没有特别惊艳' } },
+      { value: 'not_received', label: { ko: '받지 못함 / 몰랐음', en: 'Did not receive it / was not aware', ja: '受け取っていない・知らなかった', zh: '未收到 / 不清楚该礼遇' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q16_weekday_weekend',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '16. 평일과 주말 중 어느 쪽이 더 끌리시나요?',
+      en: '16. Do you prefer weekdays or weekends?',
+      ja: '16. 平日と週末のどちらにより魅力を感じますか？',
+      zh: '16. 平日与周末之中，哪一种更吸引您？',
+    },
+    options: [
+      { value: 'weekdays_quiet', label: { ko: '평일 (한적함 선호)', en: 'Weekdays (I prefer quiet)', ja: '平日（静かで落ち着いた雰囲気を好む）', zh: '平日（偏爱清幽静谧）' } },
+      { value: 'weekends_dinner', label: { ko: '주말 (arp 저녁 다이닝 포함 가능)', en: 'Weekends (can include dinner at arp)', ja: '週末（arpでのディナーを含められる）', zh: '周末（可包含 arp 晚宴餐饮）' } },
+      { value: 'no_preference', label: { ko: '상관없음', en: 'No preference', ja: 'どちらでも構わない', zh: '都可以 / 无所谓' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q17_recommendation_nps',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'satisfaction',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '17. 이런 "웰니스 × 자연 연결" 팸투어를 부산 방문 VIP 지인에게 추천할 의향은?',
+      en: '17. How likely are you to recommend a "Wellness × Nature" fam tour like this to VIP acquaintances visiting Busan?',
+      ja: '17. このような「ウェルネス×自然」ツアーを、釜山を訪れる大切な知人やVIPに勧めたいですか？',
+      zh: '17. 您是否愿意将这种“疗愈 × 自然连接”的深度体验推荐给到访釜山的 VIP 挚友或贵宾？',
+    },
+    options: [
+      { value: 'promoter_9_10', label: { ko: '매우 추천함 (9~10점)', en: 'Highly likely (9–10)', ja: 'ぜひおすすめしたい（9〜10点）', zh: '极力推荐（9–10分）' } },
+      { value: 'passive_7_8', label: { ko: '추천하는 편 (7~8점)', en: 'Likely (7–8)', ja: 'おすすめしたい（7〜8点）', zh: '比较推荐（7–8分）' } },
+      { value: 'neutral_5_6', label: { ko: '보통 (5~6점)', en: 'Neutral (5–6)', ja: '普通（5〜6点）', zh: '中立 / 一般（5–6分）' } },
+      { value: 'detractor_0_4', label: { ko: '추천하지 않음 (0~4점)', en: 'Unlikely (0–4)', ja: 'おすすめしない（0〜4点）', zh: '暂不推荐（0–4分）' } },
+    ],
+  },
+  {
+    id: 'ondo_gos_q18_sns_share',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'single_choice',
+    required: true,
+    title: {
+      ko: '18. 오늘 경험을 SNS에 공유하고 싶은 마음이 들었나요?',
+      en: "18. Did you feel like sharing today's experience on social media?",
+      ja: '18. 今日の体験をSNSでシェアしたいと思いましたか？',
+      zh: '18. 您是否有在社交媒体（SNS）上分享今天体验的冲动？',
+    },
+    options: [
+      { value: 'already_or_will_share', label: { ko: '이미 공유했거나 꼭 할 것', en: 'Already shared or definitely will', ja: 'すでにシェアした、または必ずする', zh: '已经分享或一定会分享' } },
+      { value: 'thinking_about_it', label: { ko: '고민 중', en: 'Thinking about it', ja: '検討中', zh: '正在考虑中' } },
+      { value: 'no_plans', label: { ko: '공유할 생각 없음', en: 'No plans to share', ja: 'シェアする予定はない', zh: '没有分享打算' } },
+    ],
+  },
+
+  // ================= Part 4. 자유 의견 (총 3개) =================
+  {
+    id: 'ondo_gos_q19_best_scene',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'text',
+    required: false,
+    title: {
+      ko: '19. 오늘 경험 중 가장 기억에 남는 한 장면을 자유롭게 적어주세요.',
+      en: '19. Describe the one moment from today that you will remember most.',
+      ja: '19. 本日の体験の中で最も記憶に残っているワンシーンをご自由にお書きください。',
+      zh: '19. 请自由写下今天体验中最令您难忘的一个画面或瞬间。',
+    },
+    placeholder: {
+      ko: '예: 을숙도 숲길을 맨발로 걸은 뒤 잔디밭에서 들었던 싱잉볼의 진동과 비엔날레 사운드 전시의 여운...',
+      en: 'e.g., Walking barefoot in Eulsukdo forest, followed by singing bowl vibrations and the Biennale sound exhibition...',
+      ja: '例：乙淑島の森を裸足で歩いた後、芝生で聴いたシンギングボウルの響きとビエンナーレ展示の余韻...',
+      zh: '例如：赤脚漫步乙淑岛森林后草坪上的颂钵泛音，以及双年展声音艺术留下的余韵...',
+    },
+  },
+  {
+    id: 'ondo_gos_q20_element_strengthen',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'text',
+    required: false,
+    title: {
+      ko: '20. 자연치유·전시·다이닝 세 요소 중 더 보강되었으면 하는 부분이 있다면?',
+      en: '20. Of the three elements (nature healing, exhibition, dining), which would you like to see strengthened?',
+      ja: '20. 自然治癒・展示・ダイニングの3つの要素のうち、さらに補強してほしい部分があれば教えてください。',
+      zh: '20. 在“自然疗愈 · 展览 · 餐饮”三大要素中，您希望哪一部分得到进一步加强？',
+    },
+    placeholder: {
+      ko: '예: 전시 관람 전 사운드 작품에 대한 간단한 가이드 카드를 제공해 주면 좋겠습니다...',
+      en: 'e.g., A brief intro card for the sound art pieces before entering the gallery would be wonderful...',
+      ja: '例：展示観覧前にサウンド作品に関する簡単な紹介カードがあるとさらに良いと思います...',
+      zh: '例如：如果在观展前能有一张关于声音艺术作品的简短导览卡就更好了...',
+    },
+  },
+  {
+    id: 'ondo_gos_q21_words_to_team',
+    productId: 'ondo-grain-of-sound-03',
+    category: 'custom',
+    type: 'text',
+    required: false,
+    title: {
+      ko: '21. ONDO 팀에게 직접 전하고 싶은 말이 있다면 남겨주세요.',
+      en: '21. Is there anything you would like to tell the ONDO team directly?',
+      ja: '21. ONDOチームに直接伝えたいことがあればご自由にお残しください。',
+      zh: '21. 如果有想直接对 ONDO 团队说的话，请留言告诉我们。',
+    },
+    placeholder: {
+      ko: 'ONDO × 아르프 을숙 팀에게 따뜻한 피드백이나 응원의 메시지를 남겨주세요.',
+      en: 'Share your warm feedback or message for the ONDO × arp Eulsuk team.',
+      ja: 'ONDO × arp Eulsukチームへの温かいフィードバックやメッセージをお寄せください。',
+      zh: '请留下您对 ONDO × arp Eulsuk 团队的温暖反馈或寄语。',
+    },
+  },
+];
+
 export const ALL_ONDO_QUESTIONS: SurveyQuestion[] = [
   ...ONDO_SURVEY_QUESTIONS,
   ...ONDO_COASTAL_SURVEY_QUESTIONS,
+  ...ONDO_GRAIN_OF_SOUND_QUESTIONS,
 ];
 
 export const MOCK_QUESTIONS: SurveyQuestion[] = ALL_ONDO_QUESTIONS;
@@ -1078,6 +1534,19 @@ export class GoogleSheetsService {
     }
   }
 
+  // 기본 내장 상품(MOCK_PRODUCTS)과 원격/로컬 상품을 안전하게 병합하는 헬퍼
+  private static mergeWithMockProducts(items: WellnessProduct[]): WellnessProduct[] {
+    const validRemote = items.filter((p) => p && p.id && p.name && typeof p.name === 'object');
+    const mockMap = new Map(MOCK_PRODUCTS.map((p) => [p.id, p]));
+    const merged = validRemote.map((p) => mockMap.get(p.id) || p);
+    for (const mockP of MOCK_PRODUCTS) {
+      if (!merged.some((p) => p.id === mockP.id)) {
+        merged.push(mockP);
+      }
+    }
+    return merged;
+  }
+
   // 1. 상품 목록 조회 (로컬 캐시 즉시 반환 + 최대 1.5초 타임아웃)
   public static async fetchProducts(): Promise<WellnessProduct[]> {
     let localProducts: WellnessProduct[] = MOCK_PRODUCTS;
@@ -1087,14 +1556,7 @@ export class GoogleSheetsService {
         try {
           const parsed = JSON.parse(stored);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            const mockMap = new Map(MOCK_PRODUCTS.map((p) => [p.id, p]));
-            const merged = parsed.map((p: WellnessProduct) => mockMap.get(p.id) || p);
-            for (const mockP of MOCK_PRODUCTS) {
-              if (!merged.some((p: WellnessProduct) => p.id === mockP.id)) {
-                merged.push(mockP);
-              }
-            }
-            localProducts = merged;
+            localProducts = this.mergeWithMockProducts(parsed);
           }
         } catch {}
       }
@@ -1117,10 +1579,11 @@ export class GoogleSheetsService {
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data) && data.length > 0) {
+          const merged = this.mergeWithMockProducts(data);
           if (typeof window !== 'undefined') {
-            localStorage.setItem(this.localProductsKey, JSON.stringify(data));
+            localStorage.setItem(this.localProductsKey, JSON.stringify(merged));
           }
-          return data;
+          return merged;
         }
       }
     } catch (e) {
@@ -1186,7 +1649,9 @@ export class GoogleSheetsService {
         try {
           const customQuestions: SurveyQuestion[] = JSON.parse(stored);
           const defaultIds = new Set(ALL_ONDO_QUESTIONS.map((q) => q.id));
-          const additions = customQuestions.filter((q) => !defaultIds.has(q.id));
+          const additions = customQuestions.filter(
+            (q) => q && q.id && !defaultIds.has(q.id) && q.title && typeof q.title === 'object'
+          );
           questions = [...ALL_ONDO_QUESTIONS, ...additions];
         } catch {}
       }
@@ -1208,7 +1673,11 @@ export class GoogleSheetsService {
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {
-            questions = data;
+            const defaultIds = new Set(ALL_ONDO_QUESTIONS.map((q) => q.id));
+            const validRemoteAdditions = data.filter(
+              (q: SurveyQuestion) => q && q.id && !defaultIds.has(q.id) && q.title && typeof q.title === 'object'
+            );
+            questions = [...ALL_ONDO_QUESTIONS, ...validRemoteAdditions];
           }
         }
       } catch (e) {}

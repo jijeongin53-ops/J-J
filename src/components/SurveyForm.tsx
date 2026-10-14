@@ -36,14 +36,38 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  // 질문들을 파트별로 분할
-  const part1Questions = questions.slice(0, 5);
-  const part2Questions = questions.slice(5, 13);
-  const part3Questions = questions.slice(13, 19);
-  const part4Questions = questions.slice(19);
+  // 질문들을 파트별로 분할 (상품별 문항 수에 맞춤)
+  const isGrainOfSound = product.id === 'ondo-grain-of-sound-03';
+  const isCoastalSerenity = product.id === 'ondo-coastal-serenity-02';
+
+  const part1Questions = isGrainOfSound
+    ? questions.slice(0, 4)
+    : questions.slice(0, 5);
+  const part2Questions = isGrainOfSound
+    ? questions.slice(4, 12)
+    : isCoastalSerenity
+    ? questions.slice(5, 17)
+    : questions.slice(5, 13);
+  const part3Questions = isGrainOfSound
+    ? questions.slice(12, 18)
+    : isCoastalSerenity
+    ? questions.slice(17, 23)
+    : questions.slice(13, 19);
+  const part4Questions = isGrainOfSound
+    ? questions.slice(18)
+    : isCoastalSerenity
+    ? questions.slice(23)
+    : questions.slice(19);
 
   const handleSingleSelect = (questionId: string, value: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    setAnswers((prev) => {
+      const next = { ...prev, [questionId]: value };
+      if (questionId === 'ondo_gos_q10_arp_visit' && value === 'did_not_visit') {
+        delete next['ondo_gos_q11_arp_space_food'];
+        delete next['ondo_gos_q12_welcome_drink'];
+      }
+      return next;
+    });
     setValidationError(null);
   };
 
@@ -74,7 +98,10 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const npsAnswer = answers['ondo_cs_q22_recommendation_nps'] || answers['ondo_q18_nps_recommendation'];
+    const npsAnswer =
+      answers['ondo_gos_q17_recommendation_nps'] ||
+      answers['ondo_cs_q22_recommendation_nps'] ||
+      answers['ondo_q18_nps_recommendation'];
     const calculatedNps =
       npsAnswer === 'promoter_9_10'
         ? 10
@@ -121,7 +148,11 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
       npsScore: calculatedNps,
       answers,
       detailedAnswers,
-      comment: answers['ondo_cs_q24_best_scene'] || answers['ondo_q20_best_scene'] || comment,
+      comment:
+        answers['ondo_gos_q19_best_scene'] ||
+        answers['ondo_cs_q24_best_scene'] ||
+        answers['ondo_q20_best_scene'] ||
+        comment,
       userProfile: {
         nationality,
         ageGroup,
@@ -213,9 +244,18 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
             const qTitle = getLocalizedText(q.title);
             const currentAns = answers[q.id];
             const placeholder = q.placeholder ? getLocalizedText(q.placeholder) : '';
+            const isArpSubQuestion =
+              q.id === 'ondo_gos_q11_arp_space_food' || q.id === 'ondo_gos_q12_welcome_drink';
+            const isSkippedByArp =
+              isArpSubQuestion && answers['ondo_gos_q10_arp_visit'] === 'did_not_visit';
 
             return (
-              <div key={q.id} className="p-4 sm:p-6 rounded-2xl bg-sand-50/40 border border-wellness-100 space-y-3.5">
+              <div
+                key={q.id}
+                className={`p-4 sm:p-6 rounded-2xl bg-sand-50/40 border border-wellness-100 space-y-3.5 transition-opacity ${
+                  isSkippedByArp ? 'opacity-45 pointer-events-none' : ''
+                }`}
+              >
                 <div>
                   <h4 className="font-serif text-sm sm:text-base font-bold text-wellness-950 leading-snug">
                     {qTitle}

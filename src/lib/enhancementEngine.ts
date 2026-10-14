@@ -37,14 +37,17 @@ export class EnhancementEngine {
         ],
         pairingRecommendations: [
           {
-            productName: 'Oryukdo Islets Wellness Private Tour (오륙도 코스탈 세레니티)',
-            benefit: '심신 활력 증진 및 백련사 사찰 리추얼',
-            reason: '에코 레조넌스의 정적인 이완과 결합하여 동적 웰니스 시너지를 극대화합니다.',
+            productName:
+              product.id === 'ondo-grain-of-sound-03'
+                ? 'Eulsukdo Island Wellness Private Tour (을숙도 에코 레조넌스)'
+                : 'Grain of Sound : 소리의 결 (을숙도 자연치유 × 부산비엔날레)',
+            benefit: '자연의 소리 어싱 명상 & 부산비엔날레 사운드 전시 · 아르프 을숙 미식',
+            reason: '자연 치유와 사운드 아트, 미식이 하나로 이어지는 감각적 리추얼을 선사합니다.',
           },
           {
-            productName: 'ONDO 프라이빗 요트 선셋 사운드배스',
-            benefit: '바다 위 파도소리와 함께하는 프리미엄 사운드 힐링',
-            reason: '하구 생태 체험에 이어 바다 한가운데서 펼쳐지는 감각의 극치를 선사합니다.',
+            productName: 'Oryukdo Islets Wellness Private Tour (오륙도 코스탈 세레니티)',
+            benefit: '심신 활력 증진 및 백련사 사찰 리추얼',
+            reason: '정적인 이완과 결합하여 바다와 사찰에서의 웰니스 시너지를 극대화합니다.',
           },
         ],
         specialCouponCode: 'ONDO-VIP-RESONANCE',
@@ -73,9 +76,12 @@ export class EnhancementEngine {
         ],
         pairingRecommendations: [
           {
-            productName: 'Program #2 Coastal Serenity',
-            benefit: '心身の活性化と全身の巡りケア',
-            reason: 'エコーレゾナンスの静寂な癒やしと組み合わせることで、さらなる相乗効果をもたらします。',
+            productName:
+              product.id === 'ondo-grain-of-sound-03'
+                ? 'Eulsukdo Island Wellness Private Tour'
+                : 'Grain of Sound : 音のキメ（乙淑島自然治癒 × 釜山ビエンナーレ）',
+            benefit: '心身の活性化とサウンドアート＆ダイニング体験',
+            reason: '自然の静寂な癒やしと芸術・美食を組み合わせることで、さらなる相乗効果をもたらします。',
           },
         ],
         specialCouponCode: 'ONDO-VIP-RESONANCE',
@@ -104,9 +110,12 @@ export class EnhancementEngine {
         ],
         pairingRecommendations: [
           {
-            productName: 'Program #2 Coastal Serenity 海岸舒缓系列',
-            benefit: '激发身体细胞生机与经络舒畅',
-            reason: '动静结合，将生态声浴的深层沉静转化为源源不断的自然活力。',
+            productName:
+              product.id === 'ondo-grain-of-sound-03'
+                ? 'Eulsukdo Island Wellness Private Tour'
+                : 'Grain of Sound : 声之纹理（乙淑岛自然疗愈 × 釜山双年展）',
+            benefit: '自然接地音疗与双年展艺术美馔共鸣',
+            reason: '动静结合，将自然声浴的深层沉静延伸至艺术展览与江海景观美馔。',
           },
         ],
         specialCouponCode: 'ONDO-VIP-RESONANCE',
@@ -136,9 +145,12 @@ export class EnhancementEngine {
         ],
         pairingRecommendations: [
           {
-            productName: 'Program #2 Coastal Serenity',
-            benefit: 'Active Lymphatic Flow & Sea Air Rejuvenation',
-            reason: 'Complements the stillness of Eco Resonance with uplifting ocean-inspired movement.',
+            productName:
+              product.id === 'ondo-grain-of-sound-03'
+                ? 'Eulsukdo Island Wellness Private Tour'
+                : 'Grain of Sound (Eulsukdo Nature Healing × Busan Biennale)',
+            benefit: 'Forest Grounding, Busan Biennale Sound Art & Rooftop Dining',
+            reason: 'Complements nature stillness with immersive sound art and river-meets-sea gastronomy.',
           },
         ],
         specialCouponCode: 'ONDO-VIP-RESONANCE',
@@ -154,9 +166,7 @@ export class EnhancementEngine {
     product: WellnessProduct,
     feedbacks: FeedbackSubmission[]
   ): ProductEnhancementSolution {
-    const relevantFeedbacks = feedbacks.filter(
-      (f) => f.productId === productId || f.productName.toLowerCase().includes('ondo') || f.productName.toLowerCase().includes('resonance')
-    );
+    const relevantFeedbacks = feedbacks.filter((f) => f.productId === productId);
 
     const total = relevantFeedbacks.length;
     const avgRating =
