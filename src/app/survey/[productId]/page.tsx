@@ -17,14 +17,24 @@ export default function ProductSurveyPage() {
   const productId = (params.productId as string) || 'ondo-eco-resonance-01';
 
   // 0초 즉시 렌더링: 기본 ONDO 상품 및 22개 문항으로 즉시 화면 표시
-  const [product, setProduct] = useState<WellnessProduct>(ONDO_ECO_RESONANCE_PRODUCT);
-  const [questions, setQuestions] = useState<SurveyQuestion[]>(ONDO_SURVEY_QUESTIONS);
+  const [product, setProduct] = useState<WellnessProduct>(() =>
+    GoogleSheetsService.getInitialProduct(productId)
+  );
+  const [questions, setQuestions] = useState<SurveyQuestion[]>(() =>
+    GoogleSheetsService.getInitialQuestions(productId)
+  );
 
   useEffect(() => {
+    // 상품 ID 변경 시 즉시 해당 상품과 전용 설문 문항 세트로 동기 전환
+    setProduct(GoogleSheetsService.getInitialProduct(productId));
+    setQuestions(GoogleSheetsService.getInitialQuestions(productId));
+
     // 백그라운드에서 구글 시트 / 로컬 스토리지 최신 데이터 동기화
     async function syncLatestData() {
       const allProducts = await GoogleSheetsService.fetchProducts();
-      const targetProduct = allProducts.find((p) => p.id === productId) || allProducts[0] || ONDO_ECO_RESONANCE_PRODUCT;
+      const targetProduct =
+        allProducts.find((p) => p.id === productId) ||
+        GoogleSheetsService.getInitialProduct(productId);
       setProduct(targetProduct);
 
       const qList = await GoogleSheetsService.fetchQuestions(targetProduct.id);

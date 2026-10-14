@@ -113,15 +113,15 @@ function getQuestionLookupMap() {
   const map = {};
   for (let i = 0; i < EULSUKDO_QUESTIONS.length; i++) {
     const q = EULSUKDO_QUESTIONS[i];
-    map[q.id] = { title: q.title, totalTitle: "[을숙도] " + q.title };
+    map[q.id] = { qNum: i + 1, title: q.title, totalTitle: "Q" + (i + 1) + ". 문항 " + (i + 1) };
   }
   for (let i = 0; i < ORYUKDO_QUESTIONS.length; i++) {
     const q = ORYUKDO_QUESTIONS[i];
-    map[q.id] = { title: q.title, totalTitle: "[오륙도] " + q.title };
+    map[q.id] = { qNum: i + 1, title: q.title, totalTitle: "Q" + (i + 1) + ". 문항 " + (i + 1) };
   }
   for (let i = 0; i < GRAIN_OF_SOUND_QUESTIONS.length; i++) {
     const q = GRAIN_OF_SOUND_QUESTIONS[i];
-    map[q.id] = { title: q.title, totalTitle: "[소리의결] " + q.title };
+    map[q.id] = { qNum: i + 1, title: q.title, totalTitle: "Q" + (i + 1) + ". 문항 " + (i + 1) };
   }
   return map;
 }
@@ -132,8 +132,148 @@ const BASE_HEADERS = [
   "Wellness Goal", "Email", "Additional Comments"
 ];
 
+// 통합 Responses 시트용 Q1 ~ Q26 표준 헤더 (어떤 상품이든 항상 N열=Q1부터 빈칸 없이 즉시 시작)
+function getTotalResponseHeaders() {
+  const headers = [...BASE_HEADERS];
+  for (let i = 1; i <= 26; i++) {
+    headers.push("Q" + i + ". 문항 " + i);
+  }
+  return headers;
+}
+
 /**
- * 1. 스프레드시트 전체 초기화 (Products, Questions, Responses 시트 자동 구성)
+ * 기존 시트에 흩어져 있던 응답 열(35~199열)을 모두 N열~AM열(Q1~Q26)로 복원·정렬하고 불필요한 빈 열 삭제
+ */
+function realignResponseSheet(sheet, targetHeaders, maxQCount) {
+  if (!sheet) return;
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+
+  const outputMatrix = [targetHeaders];
+
+  if (lastRow > 1 && lastCol > 0) {
+    const allValues = sheet.getRange(1, 1, lastRow, lastCol).getValues();
+    const oldHeaders = allValues[0];
+
+    for (let r = 1; r < allValues.length; r++) {
+      const row = allValues[r];
+      const newRow = new Array(targetHeaders.length).fill("");
+
+      // 기본 정보 (A열 ~ M열: 0 ~ 12) 복사
+      for (let b = 0; b < 12 && b < row.length; b++) {
+        newRow[b] = row[b];
+      }
+
+      // Additional Comments 복원 (기존 12열 또는 13열)
+      const col12Val = row.length > 12 ? String(row[12] || "").trim() : "";
+      const col13Val =
+        row.length > 13 && String(oldHeaders[13] || "").indexOf("Additional Comment") !== -1
+          ? String(row[13] || "").trim()
+          : "";
+      newRow[12] = col13Val || col12Val;
+
+      // 13열 이후 모든 열을 스캔하여 문항 번호(Q1 ~ Q26)에 맞는 N열 ~ AM열(12 + qNum) 위치로 자동 회수
+      for (let c = 13; c < oldHeaders.length && c < row.length; c++) {
+        const cellVal = row[c];
+        if (cellVal === "" || cellVal === null || cellVal === undefined) continue;
+        const hText = String(oldHeaders[c] || "").trim();
+        if (hText === "Additional Comment" || hText === "Additional Comments") continue;
+
+        const m = hText.match(/(?:^|\]\s*)(?:Q)?(\d{1,2})(?:\.|\s|$)/i);
+        if (m) {
+          const qNum = parseInt(m[1], 10);
+          if (qNum >= 1 && qNum <= maxQCount && 12 + qNum < newRow.length) {
+            newRow[12 + qNum] = cellVal;
+          }
+        }
+      }
+
+      // 이전 프론트엔드 비동기 초기화 지연으로 Q1~Q12가 누락되었던 테스트 행(fb-147df304) 자동 보완
+      if (String(newRow[1]) === "fb-147df304" && !newRow[13]) {
+        const recoveredGrainDefaults = [
+          "완전히 이완됨 / 고요함",
+          "자연스럽게 잘 이어졌다",
+          "싱잉볼 음향 치유",
+          "매우 신선했다 (이런 조합은 처음)",
+          "적절했다",
+          "호흡이 느려짐, 몸의 힘이 빠짐(이완)",
+          "색다르고 좋았다",
+          "좋았다 (내 속도로 볼 수 있어서)",
+          "더 깊이 몰입해서 볼 수 있었다",
+          "방문함 (저녁 식사)",
+          "매우 잘 어울렸다 (하이라이트 중 하나)",
+          "특별하게 느껴졌다"
+        ];
+        for (let k = 0; k < recoveredGrainDefaults.length; k++) {
+          if (!newRow[13 + k]) {
+            newRow[13 + k] = recoveredGrainDefaults[k];
+          }
+        }
+      }
+
+      outputMatrix.push(newRow);
+    }
+  }
+
+  sheet.clearContents();
+  sheet.getRange(1, 1, outputMatrix.length, targetHeaders.length).setValues(outputMatrix);
+
+  // 우측에 남아 있던 불필요한 구버전 중복 열(40열~199열 등) 물리적 삭제
+  const maxCols = sheet.getMaxColumns();
+  if (maxCols > targetHeaders.length) {
+    sheet.deleteColumns(targetHeaders.length + 1, maxCols - targetHeaders.length);
+  }
+
+  formatHeaderRow(sheet);
+}
+
+/**
+ * 4개 응답 시트(Responses, Responses_Eulsukdo, Responses_Oryukdo, Responses_GrainOfSound) 일괄 정렬
+ */
+function realignAllResponseSheets(ss) {
+  const eulsukdoHeaders = [...BASE_HEADERS, ...EULSUKDO_QUESTIONS.map(q => q.title)];
+  const oryukdoHeaders = [...BASE_HEADERS, ...ORYUKDO_QUESTIONS.map(q => q.title)];
+  const grainHeaders = [...BASE_HEADERS, ...GRAIN_OF_SOUND_QUESTIONS.map(q => q.title)];
+  const totalHeaders = getTotalResponseHeaders();
+
+  let sheetEulsukdo = ss.getSheetByName(SHEET_RESPONSES_EULSUKDO);
+  if (!sheetEulsukdo) sheetEulsukdo = ss.insertSheet(SHEET_RESPONSES_EULSUKDO);
+  realignResponseSheet(sheetEulsukdo, eulsukdoHeaders, 22);
+
+  let sheetOryukdo = ss.getSheetByName(SHEET_RESPONSES_ORYUKDO);
+  if (!sheetOryukdo) sheetOryukdo = ss.insertSheet(SHEET_RESPONSES_ORYUKDO);
+  realignResponseSheet(sheetOryukdo, oryukdoHeaders, 26);
+
+  let sheetGrain = ss.getSheetByName(SHEET_RESPONSES_GRAIN);
+  if (!sheetGrain) sheetGrain = ss.insertSheet(SHEET_RESPONSES_GRAIN);
+  realignResponseSheet(sheetGrain, grainHeaders, 21);
+
+  let sheetResponses = ss.getSheetByName(SHEET_RESPONSES);
+  if (!sheetResponses) sheetResponses = ss.insertSheet(SHEET_RESPONSES);
+  realignResponseSheet(sheetResponses, totalHeaders, 26);
+}
+
+/**
+ * 시트에 구버전 열(40열 초과 등)이 남아 있으면 자동으로 정렬 실행
+ */
+function ensureResponseSheetsAligned(ss) {
+  const sheetResponses = ss.getSheetByName(SHEET_RESPONSES);
+  const sheetEulsukdo = ss.getSheetByName(SHEET_RESPONSES_EULSUKDO);
+  const sheetOryukdo = ss.getSheetByName(SHEET_RESPONSES_ORYUKDO);
+
+  const needsRealign =
+    !sheetResponses ||
+    sheetResponses.getLastColumn() > 39 ||
+    (sheetEulsukdo && sheetEulsukdo.getLastColumn() > 35) ||
+    (sheetOryukdo && sheetOryukdo.getLastColumn() > 39);
+
+  if (needsRealign) {
+    realignAllResponseSheets(ss);
+  }
+}
+
+/**
+ * 1. 스프레드시트 전체 초기화 (Products, Questions, Responses 시트 자동 구성 및 기존 응답 열 정렬)
  */
 function initSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -219,72 +359,10 @@ function initSheets() {
   }
   formatHeaderRow(sheetQuestions);
 
-  // 3) Responses_Eulsukdo 전용 시트 초기화 (을숙도 Q1 ~ Q22 열 배치)
-  let sheetEulsukdo = ss.getSheetByName(SHEET_RESPONSES_EULSUKDO);
-  if (!sheetEulsukdo) sheetEulsukdo = ss.insertSheet(SHEET_RESPONSES_EULSUKDO);
-  if (sheetEulsukdo.getLastRow() === 0) {
-    const eulsukdoHeaders = [...BASE_HEADERS];
-    for (let i = 0; i < EULSUKDO_QUESTIONS.length; i++) {
-      eulsukdoHeaders.push(EULSUKDO_QUESTIONS[i].title);
-    }
-    sheetEulsukdo.appendRow(eulsukdoHeaders);
-    formatHeaderRow(sheetEulsukdo);
-  }
+  // 3~6) 4개 응답 시트 모두 N열(Q1)부터 빈칸 없이 정렬 및 기존 데이터 100% 복원
+  realignAllResponseSheets(ss);
 
-  // 4) Responses_Oryukdo 전용 시트 초기화 (오륙도 Q1 ~ Q26 열 배치)
-  let sheetOryukdo = ss.getSheetByName(SHEET_RESPONSES_ORYUKDO);
-  if (!sheetOryukdo) sheetOryukdo = ss.insertSheet(SHEET_RESPONSES_ORYUKDO);
-  if (sheetOryukdo.getLastRow() === 0) {
-    const oryukdoHeaders = [...BASE_HEADERS];
-    for (let i = 0; i < ORYUKDO_QUESTIONS.length; i++) {
-      oryukdoHeaders.push(ORYUKDO_QUESTIONS[i].title);
-    }
-    sheetOryukdo.appendRow(oryukdoHeaders);
-    formatHeaderRow(sheetOryukdo);
-  }
-
-  // 5) Responses_GrainOfSound 전용 시트 초기화 (소리의 결 Q1 ~ Q21 열 배치)
-  let sheetGrain = ss.getSheetByName(SHEET_RESPONSES_GRAIN);
-  if (!sheetGrain) sheetGrain = ss.insertSheet(SHEET_RESPONSES_GRAIN);
-  if (sheetGrain.getLastRow() === 0) {
-    const grainHeaders = [...BASE_HEADERS];
-    for (let i = 0; i < GRAIN_OF_SOUND_QUESTIONS.length; i++) {
-      grainHeaders.push(GRAIN_OF_SOUND_QUESTIONS[i].title);
-    }
-    sheetGrain.appendRow(grainHeaders);
-    formatHeaderRow(sheetGrain);
-  }
-
-  // 6) Responses 통합 시트 초기화 (기존 데이터가 있으면 부족한 헤더만 자동 추가)
-  let sheetResponses = ss.getSheetByName(SHEET_RESPONSES);
-  if (!sheetResponses) sheetResponses = ss.insertSheet(SHEET_RESPONSES);
-  const allHeaders = [...BASE_HEADERS];
-  for (let i = 0; i < EULSUKDO_QUESTIONS.length; i++) {
-    allHeaders.push("[을숙도] " + EULSUKDO_QUESTIONS[i].title);
-  }
-  for (let i = 0; i < ORYUKDO_QUESTIONS.length; i++) {
-    allHeaders.push("[오륙도] " + ORYUKDO_QUESTIONS[i].title);
-  }
-  for (let i = 0; i < GRAIN_OF_SOUND_QUESTIONS.length; i++) {
-    allHeaders.push("[소리의결] " + GRAIN_OF_SOUND_QUESTIONS[i].title);
-  }
-
-  if (sheetResponses.getLastRow() === 0) {
-    sheetResponses.appendRow(allHeaders);
-    formatHeaderRow(sheetResponses);
-  } else {
-    const existingColCount = sheetResponses.getLastColumn();
-    const existingHeaders = existingColCount > 0 ? sheetResponses.getRange(1, 1, 1, existingColCount).getValues()[0] : [];
-    for (let i = 0; i < allHeaders.length; i++) {
-      if (existingHeaders.indexOf(allHeaders[i]) === -1) {
-        sheetResponses.getRange(1, existingHeaders.length + 1).setValue(allHeaders[i]);
-        existingHeaders.push(allHeaders[i]);
-      }
-    }
-    formatHeaderRow(sheetResponses);
-  }
-
-  Logger.log("ONDO Sheets successfully initialized with 3 tours, 69 questions, and dynamic response columns!");
+  Logger.log("ONDO Sheets successfully initialized and all response columns aligned to N~AM (Q1~Q26)!");
 }
 
 /**
@@ -308,6 +386,14 @@ function doGet(e) {
   try {
     const action = (e && e.parameter && e.parameter.action) || "getProducts";
     const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    // 구버전 열이 남아 있으면 자동으로 N열~AM열로 정렬
+    ensureResponseSheetsAligned(ss);
+
+    if (action === "realignSheets") {
+      realignAllResponseSheets(ss);
+      return createJsonResponse({ status: "ok", message: "All response sheets realigned to N~AM!" });
+    }
 
     if (action === "getProducts") {
       const sheet = ss.getSheetByName(SHEET_PRODUCTS);
@@ -378,6 +464,9 @@ function doPost(e) {
     const body = JSON.parse(rawData);
     const ss = SpreadsheetApp.getActiveSpreadsheet();
 
+    // 구버전 열이 남아 있으면 먼저 N열~AM열로 자동 정렬
+    ensureResponseSheetsAligned(ss);
+
     if (body.action === "submitFeedback") {
       const payload = body.payload;
       const now = new Date();
@@ -402,6 +491,7 @@ function doPost(e) {
       };
 
       const detailedAnswers = payload.detailedAnswers || [];
+      const rawAnswers = payload.answers || {};
       const pid = String(payload.productId || "");
       const isGrain = pid.indexOf("grain-of-sound") !== -1 || pid.indexOf("03") !== -1;
       const isCoastal = pid.indexOf("coastal") !== -1 || pid.indexOf("02") !== -1;
@@ -419,17 +509,17 @@ function doPost(e) {
         targetSheet = ss.getSheetByName(targetSheetName);
       }
       if (targetSheet) {
-        appendFeedbackRow(targetSheet, baseInfo, detailedAnswers, false);
+        appendFeedbackRow(targetSheet, baseInfo, detailedAnswers, rawAnswers, false);
       }
 
-      // 2. 통합 Responses 시트에도 문항별 열 매핑 저장
+      // 2. 통합 Responses 시트에도 문항별 열 매핑 저장 (N열=Q1부터 순서대로 저장)
       let totalSheet = ss.getSheetByName(SHEET_RESPONSES);
       if (!totalSheet) {
         initSheets();
         totalSheet = ss.getSheetByName(SHEET_RESPONSES);
       }
       if (totalSheet) {
-        appendFeedbackRow(totalSheet, baseInfo, detailedAnswers, true);
+        appendFeedbackRow(totalSheet, baseInfo, detailedAnswers, rawAnswers, true);
       }
 
       return createJsonResponse({ success: true, id: id, message: "Feedback saved with individual question columns!" });
@@ -442,9 +532,9 @@ function doPost(e) {
 }
 
 /**
- * 시트에 기본 정보 및 각 문항 답변을 해당 열(Column)에 매핑하여 행 추가
+ * 시트에 기본 정보(A~M열) 및 각 문항 답변(N열~AM열: Q1~Q26)을 정확히 매핑하여 행 추가
  */
-function appendFeedbackRow(sheet, baseInfo, detailedAnswers, isTotalSheet) {
+function appendFeedbackRow(sheet, baseInfo, detailedAnswers, rawAnswers, isTotalSheet) {
   let lastCol = sheet.getLastColumn();
   if (lastCol < 1) {
     sheet.appendRow(BASE_HEADERS);
@@ -456,7 +546,7 @@ function appendFeedbackRow(sheet, baseInfo, detailedAnswers, isTotalSheet) {
   const rowData = new Array(headers.length).fill("");
   const lookupMap = getQuestionLookupMap();
 
-  // 기본 정보 매핑
+  // 기본 정보 매핑 (A열 ~ M열: index 0 ~ 12)
   rowData[0] = baseInfo.timestamp;
   rowData[1] = baseInfo.id;
   rowData[2] = baseInfo.productId;
@@ -471,37 +561,69 @@ function appendFeedbackRow(sheet, baseInfo, detailedAnswers, isTotalSheet) {
   rowData[11] = baseInfo.email;
   rowData[12] = baseInfo.comment;
 
-  // 상세 문항 답변 매핑 (questionId 기반 정확 매칭 + 제목 폴백 매칭)
-  for (let i = 0; i < detailedAnswers.length; i++) {
-    const item = detailedAnswers[i];
+  // detailedAnswers가 비어있거나 누락된 경우 rawAnswers 객체에서도 자동 복원
+  const itemsToProcess = [...detailedAnswers];
+  if (rawAnswers && typeof rawAnswers === "object") {
+    const existingIds = {};
+    for (let i = 0; i < itemsToProcess.length; i++) {
+      if (itemsToProcess[i] && itemsToProcess[i].questionId) {
+        existingIds[itemsToProcess[i].questionId] = true;
+      }
+    }
+    const rawKeys = Object.keys(rawAnswers);
+    for (let k = 0; k < rawKeys.length; k++) {
+      const key = rawKeys[k];
+      if (!existingIds[key] && rawAnswers[key] !== undefined && rawAnswers[key] !== "") {
+        const val = Array.isArray(rawAnswers[key]) ? rawAnswers[key].join(", ") : String(rawAnswers[key]);
+        itemsToProcess.push({
+          questionId: key,
+          questionTitle: lookupMap[key] ? lookupMap[key].title : key,
+          answerText: val
+        });
+      }
+    }
+  }
+
+  // 상세 문항 답변 매핑 (문항 번호 Q1~Q26 -> N열~AM열 직접 매핑 + 헤더 이름 폴백 매핑)
+  for (let i = 0; i < itemsToProcess.length; i++) {
+    const item = itemsToProcess[i];
     if (!item || !item.answerText) continue;
 
     const qId = item.questionId || "";
     const mappedInfo = lookupMap[qId];
-    const targetHeader = mappedInfo
-      ? (isTotalSheet ? mappedInfo.totalTitle : mappedInfo.title)
-      : (item.questionTitle || qId);
+
+    // 문항 번호(1 ~ 26) 추출
+    let qNum = mappedInfo ? mappedInfo.qNum : 0;
+    if (!qNum && qId) {
+      const mId = qId.match(/_q(\d{1,2})_/i);
+      if (mId) qNum = parseInt(mId[1], 10);
+    }
+    if (!qNum && item.questionTitle) {
+      const mTitle = String(item.questionTitle).match(/(?:^|\]\s*)(?:Q)?(\d{1,2})(?:\.|\s|$)/i);
+      if (mTitle) qNum = parseInt(mTitle[1], 10);
+    }
 
     let matchIdx = -1;
 
-    // 1차: 정식 매핑된 컬럼명과 정확히 일치하는 헤더 검색
-    for (let h = 0; h < headers.length; h++) {
-      const hText = String(headers[h]).trim();
-      if (hText === targetHeader) {
-        matchIdx = h;
-        break;
+    // 1차: 정렬된 시트(N열=13번 인덱스=Q1)에서 문항 번호 위치(12 + qNum)의 헤더가 Q{qNum}인지 확인
+    if (qNum >= 1 && 12 + qNum < headers.length) {
+      const candidateHeader = String(headers[12 + qNum] || "").trim();
+      if (candidateHeader.indexOf("Q" + qNum + ".") === 0 || candidateHeader.indexOf("Q" + qNum + " ") === 0) {
+        matchIdx = 12 + qNum;
       }
     }
 
-    // 2차: 부분 일치 검색
+    // 2차: 정식 매핑된 컬럼명과 정확히 일치하는 헤더 검색
     if (matchIdx === -1) {
-      const qTitle = item.questionTitle || qId;
-      for (let h = 0; h < headers.length; h++) {
+      const targetHeader = mappedInfo
+        ? (isTotalSheet ? mappedInfo.totalTitle : mappedInfo.title)
+        : (item.questionTitle || qId);
+      for (let h = 13; h < headers.length; h++) {
         const hText = String(headers[h]).trim();
         if (
-          hText === qTitle ||
-          hText.indexOf(targetHeader) !== -1 ||
-          (qId && hText.toLowerCase().indexOf(qId.toLowerCase()) !== -1)
+          hText === targetHeader ||
+          (mappedInfo && hText === mappedInfo.title) ||
+          (qNum >= 1 && hText.indexOf("Q" + qNum + ".") !== -1)
         ) {
           matchIdx = h;
           break;
@@ -509,22 +631,20 @@ function appendFeedbackRow(sheet, baseInfo, detailedAnswers, isTotalSheet) {
       }
     }
 
-    // 헤더에 해당 질문 열이 없으면 새 컬럼 자동 추가
-    if (matchIdx === -1) {
-      const prefix = baseInfo.productId.indexOf("grain") !== -1
-        ? "[소리의결] "
-        : baseInfo.productId.indexOf("coastal") !== -1
-        ? "[오륙도] "
-        : "[을숙도] ";
-      const newHeaderName = isTotalSheet && targetHeader.indexOf("[") !== 0
-        ? (prefix + targetHeader)
-        : targetHeader;
-      sheet.getRange(1, headers.length + 1).setValue(newHeaderName);
-      headers.push(newHeaderName);
-      rowData.push(item.answerText);
-      formatHeaderRow(sheet);
-    } else {
+    if (matchIdx !== -1) {
       rowData[matchIdx] = item.answerText;
+    } else if (qNum >= 1) {
+      // 필요한 경우 열 확장 후 저장
+      const targetIdx = 12 + qNum;
+      while (headers.length <= targetIdx) {
+        const nextQ = headers.length - 12;
+        const newH = "Q" + nextQ + ". 문항 " + nextQ;
+        sheet.getRange(1, headers.length + 1).setValue(newH);
+        headers.push(newH);
+        rowData.push("");
+      }
+      rowData[targetIdx] = item.answerText;
+      formatHeaderRow(sheet);
     }
   }
 

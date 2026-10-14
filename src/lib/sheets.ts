@@ -1515,17 +1515,42 @@ export const MOCK_QUESTIONS: SurveyQuestion[] = ALL_ONDO_QUESTIONS;
 export const MOCK_FEEDBACKS: FeedbackSubmission[] = [];
 
 // 구글 시트 연동 유틸리티 클래스/함수 (0초 즉시 렌더링 + 비동기 타임아웃 최적화)
+export const DEFAULT_GAS_WEBHOOK_URL =
+  'https://script.google.com/macros/s/AKfycbzxb6Yjzzql-p5NYe-waykmQBpO7sS9IP92p_3wyz8qDR1D-hM7_r4d3H7lBsH1hK6i/exec';
+
 export class GoogleSheetsService {
   private static gasUrlKey = 'jnj_gas_webhook_url';
   private static localProductsKey = 'jnj_local_products';
   private static localQuestionsKey = 'jnj_local_questions';
+
+  // 상품 ID로 초기 상품을 0초 동기 조회하는 헬퍼
+  public static getInitialProduct(productId: string): WellnessProduct {
+    return (
+      MOCK_PRODUCTS.find((p) => p.id === productId || p.slug === productId) ||
+      ONDO_ECO_RESONANCE_PRODUCT
+    );
+  }
+
+  // 상품 ID로 초기 설문 문항을 0초 동기 조회하는 헬퍼 (비동기 지연으로 인한 문항 ID 불일치 원천 차단)
+  public static getInitialQuestions(productId: string): SurveyQuestion[] {
+    if (productId === 'ondo-grain-of-sound-03' || productId.includes('grain-of-sound')) {
+      return ONDO_GRAIN_OF_SOUND_QUESTIONS;
+    }
+    if (productId === 'ondo-coastal-serenity-02' || productId.includes('coastal')) {
+      return ONDO_COASTAL_SURVEY_QUESTIONS;
+    }
+    const filtered = ALL_ONDO_QUESTIONS.filter(
+      (q) => q.productId === productId || q.productId === 'all'
+    );
+    return filtered.length > 0 ? filtered : ONDO_SURVEY_QUESTIONS;
+  }
 
   public static getWebhookUrl(): string {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(this.gasUrlKey);
       if (stored && stored.trim() !== '') return stored;
     }
-    return process.env.NEXT_PUBLIC_GOOGLE_SHEETS_URL || '';
+    return process.env.NEXT_PUBLIC_GOOGLE_SHEETS_URL || DEFAULT_GAS_WEBHOOK_URL;
   }
 
   public static setWebhookUrl(url: string): void {
@@ -1702,15 +1727,20 @@ export class GoogleSheetsService {
 
     const url = this.getWebhookUrl();
     if (url) {
-      // 비동기 백그라운드 전송 (Fire-and-Forget)
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          action: 'submitFeedback',
-          payload: submission,
-        }),
-      }).catch((err) => console.warn('Background sync warning:', err));
+      // 비동기 백그라운드 전송 (Fire-and-Forget, 페이지 이동 시에도 끊기지 않도록 keepalive 설정)
+      try {
+        await fetch(url, {
+          method: 'POST',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'submitFeedback',
+            payload: submission,
+          }),
+        });
+      } catch (err) {
+        console.warn('Background sync warning:', err);
+      }
     }
 
     return { success: true, message: 'Saved successfully.' };

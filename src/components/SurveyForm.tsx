@@ -113,12 +113,24 @@ export function SurveyForm({ product, questions }: SurveyFormProps) {
         ? 3
         : 10;
 
-    const detailedAnswers = questions.map((q) => {
+    const detailedAnswers = questions.map((q, idx) => {
       const qTitle = getLocalizedText(q.title) || q.id;
-      const rawVal = answers[q.id];
+      let rawVal = answers[q.id];
+      if (rawVal === undefined) {
+        const fallbackKey = Object.keys(answers).find((k) =>
+          new RegExp(`_q${idx + 1}_`, 'i').test(k)
+        );
+        if (fallbackKey) {
+          rawVal = answers[fallbackKey];
+        }
+      }
       let answerText = '';
 
-      if (rawVal !== undefined && rawVal !== null && rawVal !== '') {
+      const isArpSubQuestion =
+        q.id === 'ondo_gos_q11_arp_space_food' || q.id === 'ondo_gos_q12_welcome_drink';
+      if (isArpSubQuestion && answers['ondo_gos_q10_arp_visit'] === 'did_not_visit') {
+        answerText = '미방문 (해당없음)';
+      } else if (rawVal !== undefined && rawVal !== null && rawVal !== '') {
         if (q.type === 'multi_choice' && Array.isArray(rawVal)) {
           const labels = rawVal.map((v) => {
             const opt = q.options?.find((o) => o.value === v);
